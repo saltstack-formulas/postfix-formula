@@ -2,7 +2,7 @@ smtp.input:
   iptables.chain_present:
     -
 
-tcp:
+smtp.iptables.tcp:
   iptables.insert:
     - table: filter
     - position: 1
@@ -14,7 +14,7 @@ tcp:
     - proto: tcp
     - save: True
 
-filter:
+smtp.iptables.filter:
   iptables.insert:
     - table: filter
     - position: 1
