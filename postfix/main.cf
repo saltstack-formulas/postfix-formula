@@ -41,3 +41,5 @@ inet_interfaces = all
 virtual_alias_maps = hash:/etc/postfix/virtual
 {% endif %}
 
+#TODO: move into a pillar
+message_size_limit = 41943040
