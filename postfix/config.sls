@@ -21,7 +21,7 @@ include:
       - service: postfix
     - template: jinja
     - defaults:
-        smtpd_banner: {{ salt['pillar.get']('postfix:smtpd_banner', '$myhostname ESMTP $mail_name (Ubuntu)' )}}
+        smtpd_banner: {{ salt['pillar.get']('postfix:smtpd_banner', '$myhostname ESMTP $mail_name' )}}
         biff: {{ salt['pillar.get']('postfix:biff', "'no'" )}}
 
         append_dot_mydomain: {{ salt['pillar.get']('postfix:append_dot_mydomain', "'no'" )}}
