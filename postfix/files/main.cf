@@ -1,3 +1,4 @@
+# Managed by config management
 # See /usr/share/postfix/main.cf.dist for a commented, more complete version
 
 
@@ -36,3 +37,10 @@ mynetworks = {{ mynetworks }}
 mailbox_size_limit = {{ mailbox_size_limit }}
 recipient_delimiter = {{ recipient_delimiter }}
 inet_interfaces = {{ inet_interfaces }}
+
+{% if 'virtual' in pillar.get('postfix','') %}
+virtual_alias_maps = hash:/etc/postfix/virtual
+{% endif %}
+
+#TODO: move into a pillar
+message_size_limit = 41943040
