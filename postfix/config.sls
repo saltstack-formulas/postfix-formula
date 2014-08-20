@@ -18,7 +18,7 @@ include:
     - require:
       - pkg: postfix
     - watch_in:
-      service: postfix
+      - service: postfix
     - template: jinja
     - defaults:
         smtpd_banner: {{ salt['pillar.get']('postfix:smtpd_banner', '$myhostname ESMTP $mail_name (Ubuntu)' )}}
