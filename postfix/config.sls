@@ -22,15 +22,15 @@ include:
     - template: jinja
     - defaults:
         smtpd_banner: {{ salt['pillar.get']('postfix:smtpd_banner', '$myhostname ESMTP $mail_name (Ubuntu)' )}}
-        biff: {{ salt['pillar.get']('postfix:biff', 'no' )}}
+        biff: {{ salt['pillar.get']('postfix:biff', "'no'" )}}
 
-        append_dot_mydomain: {{ salt['pillar.get']('postfix:append_dot_mydomain', 'no' )}}
+        append_dot_mydomain: {{ salt['pillar.get']('postfix:append_dot_mydomain', "'no'" )}}
 
-        readme_directory: {{ salt['pillar.get']('postfix:readme_directory', 'no' )}}
+        readme_directory: {{ salt['pillar.get']('postfix:readme_directory', "'no'" )}}
 
         smtpd_tls_cert_file: {{ salt['pillar.get']('postfix:smtpd_tls_cert_file', '/etc/ssl/certs/ssl-cert-snakeoil.pem' )}}
         smtpd_tls_key_file: {{ salt['pillar.get']('postfix:smtpd_tls_key_file', '/etc/ssl/private/ssl-cert-snakeoil.key' )}}
-        smtpd_use_tls: {{ salt['pillar.get']('postfix:smtpd_use_tls', 'yes' )}}
+        smtpd_use_tls: {{ salt['pillar.get']('postfix:smtpd_use_tls', "'yes'" )}}
         smtpd_tls_session_cache_database: {{ salt['pillar.get']('postfix:smtpd_tls_session_cache_database', 'btree:${data_directory}/smtpd_scache' )}}
         smtp_tls_session_cache_database: {{ salt['pillar.get']('postfix:smtp_tls_session_cache_database', 'btree:${data_directory}/smtp_scache' )}}
 
