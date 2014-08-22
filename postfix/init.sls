@@ -7,18 +7,6 @@ postfix:
       - pkg: postfix
     - watch:
       - pkg: postfix
-      - file: /etc/postfix/main.cf
-
-# postfix main configuration file
-/etc/postfix/main.cf:
-  file.managed:
-    - source: salt://postfix/main.cf
-    - user: root
-    - group: root
-    - mode: 644
-    - template: jinja
-    - require:
-      - pkg: postfix
 
 # manage /etc/aliases if data found in pillar
 {% if 'aliases' in pillar.get('postfix', '') %}
