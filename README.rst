@@ -1,5 +1,5 @@
-postfix
-=======
+postfix-formula
+===============
 
 Formulas to set up and configure the Postfix mail transfer agent.
 
