@@ -1,3 +1,12 @@
+{% set config = salt['pillar.get']('postfix', {}) -%}
+{% set processed_parameters = [] -%}
+{% macro set_parameter(parameter, default=None) -%}
+{% set value = config.get(parameter, default) -%}
+{% if value is not none -%}
+{{ parameter }} = {{ value }}
+{%- do processed_parameters.append(parameter) -%}
+{% endif -%}
+{% endmacro -%}
 # Managed by config management
 # See /usr/share/postfix/main.cf.dist for a commented, more complete version
 
@@ -7,36 +16,36 @@
 # is /etc/mailname.
 #myorigin = /etc/mailname
 
-smtpd_banner = {{ smtpd_banner }}
-biff = {{ biff }}
+{{ set_parameter('smtpd_banner', '$myhostname ESMTP $mail_name') }}
+{{ set_parameter('biff', 'no') }}
 
 # appending .domain is the MUA's job.
-append_dot_mydomain = {{ append_dot_mydomain  }}
+{{ set_parameter('append_dot_mydomain', 'no') }}
 
 # Uncomment the next line to generate "delayed mail" warnings
 #delay_warning_time = 4h
 
-readme_directory = {{ readme_directory }}
+{{ set_parameter('readme_directory', 'no') }}
 
 # TLS parameters
-smtpd_tls_cert_file = {{ smtpd_tls_cert_file }}
-smtpd_tls_key_file = {{ smtpd_tls_key_file }}
-smtpd_use_tls = {{ smtpd_use_tls }}
-smtpd_tls_session_cache_database = {{ smtpd_tls_session_cache_database }}
-smtp_tls_session_cache_database = {{ smtp_tls_session_cache_database }}
+{{ set_parameter('smtpd_tls_cert_file', '/etc/ssl/certs/ssl-cert-snakeoil.pem') }}
+{{ set_parameter('smtpd_tls_key_file', '/etc/ssl/private/ssl-cert-snakeoil.key') }}
+{{ set_parameter('smtpd_use_tls', 'yes') }}
+{{ set_parameter('smtpd_tls_session_cache_database', 'btree:${data_directory}/smtpd_scache') }}
+{{ set_parameter('smtp_tls_session_cache_database', 'btree:${data_directory}/smtp_scache') }}
 
 # See /usr/share/doc/postfix/TLS_README.gz in the postfix-doc package for
 # information on enabling SSL in the smtp client.
 
-myhostname = {{ myhostname }}
-alias_maps = {{ alias_maps }}
-alias_database = {{ alias_database }}
-mydestination = {{ mydestination }}
-relayhost = {{ relayhost }}
-mynetworks = {{ mynetworks }}
-mailbox_size_limit = {{ mailbox_size_limit }}
-recipient_delimiter = {{ recipient_delimiter }}
-inet_interfaces = {{ inet_interfaces }}
+{{ set_parameter('myhostname', grains['fqdn']) }}
+{{ set_parameter('alias_maps', 'hash:/etc/aliases') }}
+{{ set_parameter('alias_database', 'hash:/etc/aliases') }}
+{{ set_parameter('mydestination', grains['fqdn'] + ', localhost.localdomain, ' + grains['domain'] ) }}
+{{ set_parameter('relayhost', '') }}
+{{ set_parameter('mynetworks', '127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128') }}
+{{ set_parameter('mailbox_size_limit', '0') }}
+{{ set_parameter('recipient_delimiter', '+') }}
+{{ set_parameter('inet_interfaces', 'all') }}
 
 {% if 'virtual' in pillar.get('postfix','') %}
 virtual_alias_maps = hash:/etc/postfix/virtual
@@ -44,3 +53,10 @@ virtual_alias_maps = hash:/etc/postfix/virtual
 
 #TODO: move into a pillar
 message_size_limit = 41943040
+
+{# Accept arbitrary parameters -#}
+{% for parameter in config -%}
+{% if parameter not in processed_parameters -%}
+{{ set_parameter(parameter) }}
+{% endif -%}
+{% endfor -%}
