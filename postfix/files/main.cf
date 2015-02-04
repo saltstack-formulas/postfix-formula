@@ -46,13 +46,11 @@
 {{ set_parameter('mailbox_size_limit', '0') }}
 {{ set_parameter('recipient_delimiter', '+') }}
 {{ set_parameter('inet_interfaces', 'all') }}
+{{ set_parameter('message_size_limit', '41943040') }}
 
 {% if 'virtual' in pillar.get('postfix','') %}
 virtual_alias_maps = hash:/etc/postfix/virtual
 {% endif %}
-
-#TODO: move into a pillar
-message_size_limit = 41943040
 
 {# Accept arbitrary parameters -#}
 {% for parameter in config -%}
