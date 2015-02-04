@@ -40,7 +40,7 @@
 {{ set_parameter('myhostname', grains['fqdn']) }}
 {{ set_parameter('alias_maps', 'hash:/etc/aliases') }}
 {{ set_parameter('alias_database', 'hash:/etc/aliases') }}
-{{ set_parameter('mydestination', grains['fqdn'] + ', localhost.localdomain, ' + grains['domain'] ) }}
+{{ set_parameter('mydestination', grains['fqdn'] + ', localhost, localhost.localdomain, ' + grains['domain'] ) }}
 {{ set_parameter('relayhost', '') }}
 {{ set_parameter('mynetworks', '127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128') }}
 {{ set_parameter('mailbox_size_limit', '0') }}
