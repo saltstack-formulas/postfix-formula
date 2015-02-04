@@ -40,19 +40,17 @@
 {{ set_parameter('myhostname', grains['fqdn']) }}
 {{ set_parameter('alias_maps', 'hash:/etc/aliases') }}
 {{ set_parameter('alias_database', 'hash:/etc/aliases') }}
-{{ set_parameter('mydestination', grains['fqdn'] + ', localhost.localdomain, ' + grains['domain'] ) }}
+{{ set_parameter('mydestination', grains['fqdn'] + ', localhost, localhost.localdomain, ' + grains['domain'] ) }}
 {{ set_parameter('relayhost', '') }}
 {{ set_parameter('mynetworks', '127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128') }}
 {{ set_parameter('mailbox_size_limit', '0') }}
 {{ set_parameter('recipient_delimiter', '+') }}
 {{ set_parameter('inet_interfaces', 'all') }}
+{{ set_parameter('message_size_limit', '41943040') }}
 
 {% if 'virtual' in pillar.get('postfix','') %}
 virtual_alias_maps = hash:/etc/postfix/virtual
 {% endif %}
-
-#TODO: move into a pillar
-message_size_limit = 41943040
 
 {# Accept arbitrary parameters -#}
 {% for parameter in config -%}
