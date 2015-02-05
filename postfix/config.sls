@@ -20,3 +20,16 @@ include:
     - watch_in:
       - service: postfix
     - template: jinja
+
+/etc/postfix/master.cf:
+  file.managed:
+    - source: salt://postfix/files/master.cf
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - pkg: postfix
+    - watch_in:
+      - service: postfix
+    - template: jinja
+

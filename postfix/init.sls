@@ -7,6 +7,9 @@ postfix:
     - watch:
       - pkg: postfix
 
+postfix-policyd-spf-python:
+  pkg.installed: []
+
 # manage /etc/aliases if data found in pillar
 {% if 'aliases' in pillar.get('postfix', '') %}
 /etc/aliases:
