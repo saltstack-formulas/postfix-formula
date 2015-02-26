@@ -1,14 +1,21 @@
+{% from "postfix/map.jinja" import postfix with context %}
+
 postfix:
-  pkg.installed: []
+  {% if postfix.packages is defined %}
+  pkg.installed:
+    - names:
+  {% for name in postfix.packages %}
+        - {{ name }}
+  {% endfor %}
+    - watch_in:
+      - service: postfix
+  {% endif %}
   service.running:
     - enable: True
     - require:
       - pkg: postfix
     - watch:
       - pkg: postfix
-
-postfix-policyd-spf-python:
-  pkg.installed: []
 
 # manage /etc/aliases if data found in pillar
 {% if 'aliases' in pillar.get('postfix', '') %}
