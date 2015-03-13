@@ -7,4 +7,8 @@
         'packages': ['mail-mta/postfix'],
         'service': 'postfix',
     },
+    'RedHat': {
+        'packages': ['postfix'],
+        'service': 'postfix',
+    },
 }, merge=salt['pillar.get']('postfix:lookup')) %}
