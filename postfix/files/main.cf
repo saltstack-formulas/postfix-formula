@@ -1,4 +1,4 @@
-{% set config = salt['pillar.get']('postfix', {}) -%}
+{% set config = salt['pillar.get']('postfix:config', {}) -%}
 {% set processed_parameters = ['aliases', 'virtual'] -%}
 {% macro set_parameter(parameter, default=None) -%}
 {% set value = config.get(parameter, default) -%}
