@@ -1,23 +1,25 @@
 postfix:
-  smtpd_banner: $myhostname ESMTP $mail_name
-  biff: 'no'
+  manage_master_config: True
+  config:
+    smtpd_banner: $myhostname ESMTP $mail_name
+    biff: 'no'
 
-  append_dot_mydomain: 'no'
+    append_dot_mydomain: 'no'
 
-  readme_directory: 'no'
+    readme_directory: 'no'
 
-  smtpd_tls_cert_file: /etc/ssl/certs/ssl-cert-snakeoil.pem
-  smtpd_tls_key_file: /etc/ssl/private/ssl-cert-snakeoil.key
-  smtpd_use_tls: 'yes'
-  smtpd_tls_session_cache_database: btree:${data_directory}/smtpd_scache
-  smtp_tls_session_cache_database: btree:${data_directory}/smtp_scache
+    smtpd_tls_cert_file: /etc/ssl/certs/ssl-cert-snakeoil.pem
+    smtpd_tls_key_file: /etc/ssl/private/ssl-cert-snakeoil.key
+    smtpd_use_tls: 'yes'
+    smtpd_tls_session_cache_database: btree:${data_directory}/smtpd_scache
+    smtp_tls_session_cache_database: btree:${data_directory}/smtp_scache
 
-  myhostname: localhost
-  alias_maps: hash:/etc/aliases
-  alias_database: hash:/etc/aliases
-  mydestination: localhost, localhost.localdomain
-  relayhost: 
-  mynetworks: 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
-  mailbox_size_limit: 0
-  recipient_delimiter: +
-  inet_interfaces: all
+    myhostname: localhost
+    alias_maps: hash:/etc/aliases
+    alias_database: hash:/etc/aliases
+    mydestination: localhost, localhost.localdomain
+    relayhost: 
+    mynetworks: 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+    mailbox_size_limit: 0
+    recipient_delimiter: +
+    inet_interfaces: all
