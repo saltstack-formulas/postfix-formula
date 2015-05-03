@@ -11,4 +11,8 @@
         'packages': ['postfix'],
         'service': 'postfix',
     },
+    'Arch' : {
+        'packages': ['postfix'],
+        'service': 'postfix',
+    },
 }, merge=salt['pillar.get']('postfix:lookup')) %}
