@@ -12,6 +12,7 @@ postfix:
     mailbox_size_limit: 0
     recipient_delimiter: +
     inet_interfaces: all
+    tls_random_source: dev:/dev/urandom
 
     # Alias
     alias_maps: hash:/etc/aliases
