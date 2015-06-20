@@ -18,6 +18,7 @@
 
 {{ set_parameter('smtpd_banner', '$myhostname ESMTP $mail_name') }}
 {{ set_parameter('biff', 'no') }}
+{{ set_parameter('compatibility_level', '2') }}
 
 # appending .domain is the MUA's job.
 {{ set_parameter('append_dot_mydomain', 'no') }}
