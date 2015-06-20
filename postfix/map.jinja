@@ -12,7 +12,7 @@
         'service': 'postfix',
     },
     'Arch' : {
-        'packages': ['postfix'],
+        'packages': ['postfix', 'postgrey'],
         'service': 'postfix',
     },
 }, merge=salt['pillar.get']('postfix:lookup')) %}
