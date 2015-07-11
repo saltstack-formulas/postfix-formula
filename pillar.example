@@ -12,7 +12,10 @@ postfix:
     mailbox_size_limit: 0
     recipient_delimiter: +
     inet_interfaces: all
-    tls_random_source: dev:/dev/urandom
+
+    # This can be useful if you are on a system that runs out of entropy
+    # quickly (VMs, low traffic servers, etc.)
+    #tls_random_source: dev:/dev/urandom
 
     # Alias
     alias_maps: hash:/etc/aliases
