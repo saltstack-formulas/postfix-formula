@@ -1,5 +1,8 @@
 postfix:
   manage_master_config: True
+  master_config:
+    enable_submission: False
+
   config:
     smtpd_banner: $myhostname ESMTP $mail_name
     biff: 'no'
