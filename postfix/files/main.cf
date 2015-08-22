@@ -40,6 +40,18 @@
 {%- set relay_restrictions = ['permit_mynetworks'] %}
 {%- set recipient_restrictions = ['permit_mynetworks'] %}
 
+{%- if config.get('smtpd_sasl_auth_enable', 'yes') == 'yes' %}
+# SASL parameters (http://www.postfix.org/SASL_README.html)
+{%- do relay_restrictions.append('permit_sasl_authenticated') -%}
+{%- do recipient_restrictions.append('permit_sasl_authenticated') -%}
+{{ set_parameter('smtpd_sasl_auth_enable') }}
+{{ set_parameter('smtpd_sasl_path', 'smtpd') }}
+{{ set_parameter('smtpd_sasl_type', 'cyrus') }}
+{{ set_parameter('smtpd_sasl_security_options', ['noanonymous', 'noplaintext']) }}
+{{ set_parameter('smtpd_sasl_tls_security_options', ['noanonymous']) }}
+{{ set_parameter('smtpd_tls_auth_only', 'yes') }}
+{%- endif %}
+
 {%- if config.get('smtpd_use_tls', 'yes') == 'yes' %}
 # TLS parameters (http://www.postfix.org/TLS_README.html)
 # Recipient settings
