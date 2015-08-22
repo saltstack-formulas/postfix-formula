@@ -1,15 +1,10 @@
 {% from "postfix/map.jinja" import postfix with context %}
 
 postfix:
-  {% if postfix.packages is defined %}
   pkg.installed:
-    - names:
-  {% for name in postfix.packages %}
-        - {{ name }}
-  {% endfor %}
+    - name: {{ postfix.package }}
     - watch_in:
       - service: postfix
-  {% endif %}
   service.running:
     - enable: True
     - require:

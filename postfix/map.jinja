@@ -1,24 +1,24 @@
 {% set postfix = salt['grains.filter_by']({
     'Debian': {
-        'packages': ['postfix'],
+        'package': 'postfix',
         'postgrey_pkg': 'postgrey',
         'service': 'postfix',
         'aliases': '/etc/aliases',
     },
     'Gentoo': {
-        'packages': ['mail-mta/postfix'],
+        'package': 'mail-mta/postfix',
         'postgrey_pkg': 'mail-filter/postgrey',
         'service': 'postfix',
         'aliases': '/etc/mail/aliases',
     },
     'RedHat': {
-        'packages': ['postfix'],
+        'package': 'postfix',
         'postgrey_pkg': 'postgrey',
         'service': 'postfix',
         'aliases': '/etc/aliases',
     },
     'Arch' : {
-        'packages': ['postfix'],
+        'package': 'postfix',
         'postgrey_pkg': 'postgrey',
         'service': 'postfix',
         'aliases': '/etc/aliases',
