@@ -3,6 +3,10 @@ postfix:
   master_config:
     enable_submission: False
 
+  postgrey:
+    enabled: True
+    location: inet:172.16.0.5:6379
+
   config:
     smtpd_banner: $myhostname ESMTP $mail_name
     biff: 'no'

@@ -59,6 +59,13 @@
 {{ set_parameter('message_size_limit', '41943040') }}
 {{ set_parameter('smtpd_relay_restrictions', ['permit_mynetworks', 'permit_sasl_authenticated', 'defer_unauth_destination']) }}
 
+{% set recipient_restrictions = ['permit_mynetworks', 'permit_sasl_authenticated', 'reject_unauth_destination'] %}
+{% set postgrey_config = salt['pillar.get']('postfix:postgrey', {}) %}
+{% if postgrey_config.get('enabled', False) %}
+{% set recipient_restrictions = recipient_restrictions + ['check_policy_service ' ~ postgrey_config.get('location', 'inet:127.0.0.1:10030')] %}
+{% endif %}
+{{ set_parameter('smtpd_recipient_restrictions', recipient_restrictions) }}
+
 {% if 'virtual' in pillar.get('postfix','') %}
 virtual_alias_maps = hash:/etc/postfix/virtual
 {% endif %}
