@@ -7,6 +7,10 @@ postfix:
     enabled: True
     location: inet:172.16.0.5:6379
 
+  policyd-spf:
+    enabled: True
+    time_limit: 7200s
+
   config:
     smtpd_banner: $myhostname ESMTP $mail_name
     biff: 'no'
