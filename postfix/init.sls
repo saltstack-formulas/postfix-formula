@@ -1,15 +1,10 @@
 {% from "postfix/map.jinja" import postfix with context %}
 
 postfix:
-  {% if postfix.packages is defined %}
   pkg.installed:
-    - names:
-  {% for name in postfix.packages %}
-        - {{ name }}
-  {% endfor %}
+    - name: {{ postfix.package }}
     - watch_in:
       - service: postfix
-  {% endif %}
   service.running:
     - enable: True
     - require:
@@ -19,7 +14,7 @@ postfix:
 
 # manage /etc/aliases if data found in pillar
 {% if 'aliases' in pillar.get('postfix', '') %}
-/etc/aliases:
+{{ postfix.aliases_file }}:
   file.managed:
     - source: salt://postfix/aliases
     - user: root
@@ -34,7 +29,7 @@ run-newaliases:
     - name: newaliases
     - cwd: /
     - watch:
-      - file: /etc/aliases
+      - file: {{ postfix.aliases_file }}
 {% endif %}
 
 # manage /etc/postfix/virtual if data found in pillar
