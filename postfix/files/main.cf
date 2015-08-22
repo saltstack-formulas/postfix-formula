@@ -1,21 +1,20 @@
-{% from "postfix/map.jinja" import postfix with context %}
-
-{% set config = salt['pillar.get']('postfix:config', {}) -%}
-{% set processed_parameters = ['aliases_file', 'virtual'] -%}
-{% macro set_parameter(parameter, default=None) -%}
-{% set value = config.get(parameter, default) -%}
-{% if value is not none -%}
-  {%- if value is number or value is string %}
+{%- from "postfix/map.jinja" import postfix with context -%}
+{%- set config = salt['pillar.get']('postfix:config', {}) -%}
+{% set processed_parameters = ['aliases_file', 'virtual'] %}
+{%- macro set_parameter(parameter, default=None) -%}
+{% set value = config.get(parameter, default) %}
+{%- if value is not none %}
+  {%- if value is number or value is string -%}
 {{ parameter }} = {{ value }}
-  {%- elif value is iterable %}
+  {%- elif value is iterable -%}
 {{ parameter }} =
     {%- for v in value %}
        {{ v }},
     {%- endfor %}
-  {%- endif %}
-{%- do processed_parameters.append(parameter) -%}
-{% endif -%}
-{% endmacro -%}
+  {%- endif -%}
+{%- do processed_parameters.append(parameter) %}
+{%- endif %}
+{%- endmacro -%}
 # Managed by config management
 # See /usr/share/postfix/main.cf.dist for a commented, more complete version
 
