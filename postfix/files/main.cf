@@ -50,8 +50,7 @@
 {{ set_parameter('recipient_delimiter', '+') }}
 {{ set_parameter('inet_interfaces', 'all') }}
 {{ set_parameter('message_size_limit', '41943040') }}
-{{ set_parameter('policyd-spf_time_limit', '3600s') }}
-{{ set_parameter('smtpd_relay_restrictions', 'permit_mynetworks permit_sasl_authenticated defer_unauth_destination check_policy_service unix:private/policyd-spf') }}
+{{ set_parameter('smtpd_relay_restrictions', 'permit_mynetworks permit_sasl_authenticated defer_unauth_destination') }}
 
 
 {% if 'virtual' in pillar.get('postfix','') %}

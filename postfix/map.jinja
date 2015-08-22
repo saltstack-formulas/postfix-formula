@@ -1,6 +1,6 @@
 {% set postfix = salt['grains.filter_by']({
     'Debian': {
-        'packages': ['postfix', 'postfix-policyd-spf-python'],
+        'packages': ['postfix'],
         'postgrey_pkg': 'postgrey',
         'service': 'postfix',
         'aliases': '/etc/aliases',
