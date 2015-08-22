@@ -56,10 +56,18 @@
 # TLS parameters (http://www.postfix.org/TLS_README.html)
 # Recipient settings
 {{ set_parameter('smtpd_use_tls') }}
+{{ set_parameter('smtpd_tls_loglevel', 1) }}
+{{ set_parameter('smtpd_tls_security_level', 'may') }}
 {{ set_parameter('smtpd_tls_cert_file', '/etc/ssl/certs/ssl-cert-snakeoil.pem') }}
 {{ set_parameter('smtpd_tls_key_file', '/etc/ssl/private/ssl-cert-snakeoil.key') }}
 {{ set_parameter('smtpd_tls_session_cache_database', 'btree:${data_directory}/smtpd_scache') }}
+{{ set_parameter('smtpd_tls_mandatory_ciphers', 'high') }}
+{{ set_parameter('smtpd_tls_mandatory_exclude_ciphers', ['aNULL', 'MD5']) }}
+{{ set_parameter('smtpd_tls_mandatory_protocols', ['!SSLv2', '!SSLv3']) }}
+{{ set_parameter('tls_preempt_cipherlist', 'yes') }}
 # Relay/Sender settings
+{{ set_parameter('smtp_tls_loglevel', 1) }}
+{{ set_parameter('smtp_tls_security_level', 'may') }}
 {{ set_parameter('smtp_tls_session_cache_database', 'btree:${data_directory}/smtp_scache') }}
 {%- endif %}
 
