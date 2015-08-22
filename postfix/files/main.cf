@@ -37,6 +37,9 @@
 
 {{ set_parameter('readme_directory', 'no') }}
 
+{%- set relay_restrictions = ['permit_mynetworks'] %}
+{%- set recipient_restrictions = ['permit_mynetworks'] %}
+
 {%- if config.get('smtpd_use_tls', 'yes') == 'yes' %}
 # TLS parameters (http://www.postfix.org/TLS_README.html)
 # Recipient settings
@@ -60,20 +63,21 @@
 {{ set_parameter('message_size_limit', '41943040') }}
 
 {%- if config.get('relayhost') %}
-{% set relay_restrictions = ['permit_mynetworks', 'permit_sasl_authenticated', 'defer_unauth_destination'] %}
 {% set policyd_spf = salt['pillar.get']('postfix:policyd-spf', {}) %}
-{% if policyd_spf.get('enabled', False) %}
-{% set relay_restrictions = relay_restrictions + ['check_policy_server unix:private/policyd-spf'] %}
+  {%- if policyd_spf.get('enabled', False) %}
+  {%- do relay_restrictions.append('check_policy_server unix:private/policyd-spf') %}
 policy-spf_time_limit = {{ policyd_spf.get('time_limit', '3600s') }}
-{% endif %}
+  {%- endif %}
+{%- do relay_restrictions.append('defer_unauth_destination') %}
 {{ set_parameter('smtpd_relay_restrictions', relay_restrictions) }}
 {%- endif %}
 
-{% set recipient_restrictions = ['permit_mynetworks', 'permit_sasl_authenticated', 'reject_unauth_destination'] %}
-{% set postgrey_config = salt['pillar.get']('postfix:postgrey', {}) %}
-{% if postgrey_config.get('enabled', False) %}
-{% set recipient_restrictions = recipient_restrictions + ['check_policy_service ' ~ postgrey_config.get('location', 'inet:127.0.0.1:10030')] %}
-{% endif %}
+{#- check_policy_service must be after reject_unauth_destination #}
+{%- do recipient_restrictions.append('reject_unauth_destination') %}
+{%- set postgrey_config = salt['pillar.get']('postfix:postgrey', {}) %}
+{%- if postgrey_config.get('enabled', False) %}
+{%- do recipient_restrictions.append('check_policy_service ' ~ postgrey_config.get('location', 'inet:127.0.0.1:10030')) %}
+{%- endif %}
 {{ set_parameter('smtpd_recipient_restrictions', recipient_restrictions) }}
 
 {% if 'virtual' in pillar.get('postfix','') %}
