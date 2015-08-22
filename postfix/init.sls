@@ -19,7 +19,7 @@ postfix:
 
 # manage /etc/aliases if data found in pillar
 {% if 'aliases' in pillar.get('postfix', '') %}
-/etc/aliases:
+{{ postfix.aliases_file }}:
   file.managed:
     - source: salt://postfix/aliases
     - user: root
@@ -34,7 +34,7 @@ run-newaliases:
     - name: newaliases
     - cwd: /
     - watch:
-      - file: /etc/aliases
+      - file: {{ postfix.aliases_file }}
 {% endif %}
 
 # manage /etc/postfix/virtual if data found in pillar

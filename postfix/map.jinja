@@ -3,20 +3,24 @@
         'packages': ['postfix', 'postfix-policyd-spf-python'],
         'postgrey_pkg': 'postgrey',
         'service': 'postfix',
+        'aliases': '/etc/aliases',
     },
     'Gentoo': {
         'packages': ['mail-mta/postfix'],
         'postgrey_pkg': 'postgrey',
         'service': 'postfix',
+        'aliases': '/etc/mail/aliases',
     },
     'RedHat': {
         'packages': ['postfix'],
         'postgrey_pkg': 'postgrey',
         'service': 'postfix',
+        'aliases': '/etc/aliases',
     },
     'Arch' : {
         'packages': ['postfix'],
         'postgrey_pkg': 'postgrey',
         'service': 'postfix',
+        'aliases': '/etc/aliases',
     },
 }, merge=salt['pillar.get']('postfix:lookup')) %}
