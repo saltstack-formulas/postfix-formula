@@ -1,7 +1,7 @@
 {% from "postfix/map.jinja" import postfix with context %}
 
 {% set config = salt['pillar.get']('postfix:config', {}) -%}
-{% set processed_parameters = ['aliases', 'virtual'] -%}
+{% set processed_parameters = ['aliases_file', 'virtual'] -%}
 {% macro set_parameter(parameter, default=None) -%}
 {% set value = config.get(parameter, default) -%}
 {% if value is not none -%}
