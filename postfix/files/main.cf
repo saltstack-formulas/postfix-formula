@@ -48,8 +48,8 @@
 # information on enabling SSL in the smtp client.
 
 {{ set_parameter('myhostname', grains['fqdn']) }}
-{{ set_parameter('alias_maps', 'hash:' ~ postfix.aliases) }}
-{{ set_parameter('alias_database', 'hash:' ~ postfix.aliases) }}
+{{ set_parameter('alias_maps', 'hash:' ~ postfix.aliases_file) }}
+{{ set_parameter('alias_database', 'hash:' ~ postfix.aliases_file) }}
 {{ set_parameter('mydestination', [grains['fqdn'], 'localhost', 'localhost.localdomain', grains['domain']]) }}
 {{ set_parameter('relayhost', '') }}
 {{ set_parameter('mynetworks', ['127.0.0.0/8', '[::ffff:127.0.0.0]/104', '[::1]/128']) }}
