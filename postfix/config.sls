@@ -33,3 +33,38 @@ include:
       - service: postfix
     - template: jinja
 {% endif %}
+
+{% set ssl_certs = salt['pillar.get']('postfix:ssl_certs', {}) -%}
+{% for name in ssl_certs %}
+/etc/ssl/private/postfix-{{ name }}.crt:
+  file.managed:
+    - contents: |
+        {{ ssl_certs[name] | indent(8) }}
+    - user: nobody
+    - group: nobody
+    - mode: 444
+    - backup: minion
+    - watch_in:
+      - service: postfix
+    - require:
+      - pkg: postfix
+{% endfor %}
+
+
+{% set ssl_keys = salt['pillar.get']('postfix:ssl_keys', {}) -%}
+{% for name in ssl_keys %}
+/etc/ssl/private/postfix-{{ name }}.key:
+  file.managed:
+    - contents: |
+        {{ ssl_keys[name] | indent(8) }}
+    - user: nobody
+    - group: nobody
+    - mode: 400
+    - backup: minion
+    - watch_in:
+      - service: postfix
+    - require:
+      - pkg: postfix
+{% endfor %}
+
+
