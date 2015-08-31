@@ -51,3 +51,22 @@ run-postmap:
     - watch:
       - file: /etc/postfix/virtual
 {% endif %}
+
+# manage /etc/postfix/sender_canonical if data found in pillar
+{% if 'sender_canonical' in pillar.get('postfix', '') %}
+/etc/postfix/sender_canonical:
+  file.managed:
+    - source: salt://postfix/sender_canonical
+    - user: root
+    - group: root
+    - mode: 644
+    - template: jinja
+    - require:
+      - pkg: postfix
+
+  cmd.wait:
+    - name: /usr/sbin/postmap /etc/postfix/sender_canonical
+    - cwd: /
+    - watch:
+      - file: /etc/postfix/sender_canonical
+{% endif %}

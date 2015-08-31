@@ -3,6 +3,16 @@ postfix:
   master_config:
     enable_submission: False
 
+  virtual:
+    groupaliasexample: 
+     - someuser_1@example.com
+     - someuser_2@example.com
+    singlealiasexample: 'someuser_3@example.com'
+
+  sender_canonical:
+    root: 'servers@example.com'
+    nagios: 'alerts@example.com'
+
   postgrey:
     enabled: True
     location: inet:172.16.0.5:6379
@@ -34,3 +44,4 @@ postfix:
     mailbox_size_limit: 0
     recipient_delimiter: +
     inet_interfaces: all
+
