@@ -1,6 +1,6 @@
 {%- from "postfix/map.jinja" import postfix with context -%}
 {%- set config = salt['pillar.get']('postfix:config', {}) -%}
-{% set processed_parameters = ['aliases_file', 'virtual', 'sender_canonical'] %}
+{% set processed_parameters = ['aliases_file', 'virtual', 'sasl_passwd', 'sender_canonical'] %}
 {%- macro set_parameter(parameter, default=None) -%}
 {% set value = config.get(parameter, default) %}
 {%- if value is not none %}
@@ -101,6 +101,10 @@ policy-spf_time_limit = {{ policyd_spf.get('time_limit', '3600s') }}
 
 {% if 'virtual' in pillar.get('postfix','') %}
 virtual_alias_maps = hash:/etc/postfix/virtual
+{% endif %}
+
+{% if 'sasl_passwd' in pillar.get('postfix','') %}
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
 {% endif %}
 
 {% if 'sender_canonical' in pillar.get('postfix','') %}
