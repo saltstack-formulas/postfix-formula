@@ -9,6 +9,9 @@ postfix:
      - someuser_2@example.com
     singlealiasexample: 'someuser_3@example.com'
 
+  sasl_passwd:
+    smtp.example.com: 'somepassword'
+
   sender_canonical:
     root: 'servers@example.com'
     nagios: 'alerts@example.com'

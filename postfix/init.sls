@@ -52,6 +52,25 @@ run-postmap:
       - file: /etc/postfix/virtual
 {% endif %}
 
+# manage /etc/postfix/sasl_passwd if data found in pillar
+{% if 'sasl_passwd' in pillar.get('postfix', '') %}
+/etc/postfix/sasl_passwd:
+  file.managed:
+    - source: salt://postfix/sasl_passwd
+    - user: root
+    - group: root
+    - mode: 644
+    - template: jinja
+    - require:
+      - pkg: postfix
+
+  cmd.wait:
+    - name: /usr/sbin/postmap /etc/postfix/sasl_passwd
+    - cwd: /
+    - watch:
+      - file: /etc/postfix/sasl_passwd
+{% endif %}
+
 # manage /etc/postfix/sender_canonical if data found in pillar
 {% if 'sender_canonical' in pillar.get('postfix', '') %}
 /etc/postfix/sender_canonical:
