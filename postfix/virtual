@@ -11,7 +11,7 @@
       {% endfor -%}
     {% else -%}
       {# ..otherwise expect it to be just a string for the value -#}
-        {{ key }}   {{ value }}
+{{ key }}   {{ value }}
     {% endif -%}
   {% endfor -%}
 {% endif -%}
