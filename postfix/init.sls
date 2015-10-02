@@ -12,6 +12,25 @@ postfix:
     - watch:
       - pkg: postfix
 
+{%- macro postmap_file(filename) %}
+{%- set file_path = '/etc/postfix/' ~ filename %}
+postmap_{{ filename }}:
+  file.managed:
+    - name: {{ file_path }}
+    - source: salt://postfix/{{ filename }}
+    - user: root
+    - group: root
+    - mode: 0644
+    - template: jinja
+    - require:
+      - pkg: postfix
+  cmd.wait:
+    - name: /usr/sbin/postmap {{ file_path }}
+    - cwd: /
+    - watch:
+      - file: {{ file_path }}
+{%- endmacro %}
+
 # manage /etc/aliases if data found in pillar
 {% if 'aliases' in pillar.get('postfix', '') %}
 {{ postfix.aliases_file }}:
@@ -34,58 +53,15 @@ run-newaliases:
 
 # manage /etc/postfix/virtual if data found in pillar
 {% if 'virtual' in pillar.get('postfix', '') %}
-/etc/postfix/virtual:
-  file.managed:
-    - source: salt://postfix/virtual
-    - user: root
-    - group: root
-    - mode: 644
-    - template: jinja
-    - require:
-      - pkg: postfix
-
-run-postmap:
-  cmd.wait:
-    - name: /usr/sbin/postmap /etc/postfix/virtual
-    - cwd: /
-    - watch:
-      - file: /etc/postfix/virtual
+{{ postmap_file('virtual') }}
 {% endif %}
 
 # manage /etc/postfix/sasl_passwd if data found in pillar
 {% if 'sasl_passwd' in pillar.get('postfix', '') %}
-/etc/postfix/sasl_passwd:
-  file.managed:
-    - source: salt://postfix/sasl_passwd
-    - user: root
-    - group: root
-    - mode: 644
-    - template: jinja
-    - require:
-      - pkg: postfix
-
-  cmd.wait:
-    - name: /usr/sbin/postmap /etc/postfix/sasl_passwd
-    - cwd: /
-    - watch:
-      - file: /etc/postfix/sasl_passwd
+{{ postmap_file('sasl_passwd') }}
 {% endif %}
 
 # manage /etc/postfix/sender_canonical if data found in pillar
 {% if 'sender_canonical' in pillar.get('postfix', '') %}
-/etc/postfix/sender_canonical:
-  file.managed:
-    - source: salt://postfix/sender_canonical
-    - user: root
-    - group: root
-    - mode: 644
-    - template: jinja
-    - require:
-      - pkg: postfix
-
-  cmd.wait:
-    - name: /usr/sbin/postmap /etc/postfix/sender_canonical
-    - cwd: /
-    - watch:
-      - file: /etc/postfix/sender_canonical
+{{ postmap_file('sender_canonical') }}
 {% endif %}
