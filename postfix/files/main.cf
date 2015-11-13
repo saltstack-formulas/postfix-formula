@@ -41,9 +41,9 @@
 
 {%- if config.get('smtpd_sasl_auth_enable', 'yes') == 'yes' %}
 # SASL parameters (http://www.postfix.org/SASL_README.html)
-{%- do relay_restrictions.append('permit_sasl_authenticated') -%}
-{%- do recipient_restrictions.append('permit_sasl_authenticated') -%}
-{{ set_parameter('smtpd_sasl_auth_enable') }}
+{%- do relay_restrictions.append('permit_sasl_authenticated') %}
+{%- do recipient_restrictions.append('permit_sasl_authenticated') %}
+{{ set_parameter('smtpd_sasl_auth_enable', 'yes') }}
 {{ set_parameter('smtpd_sasl_path', 'smtpd') }}
 {{ set_parameter('smtpd_sasl_type', 'cyrus') }}
 {{ set_parameter('smtpd_sasl_security_options', ['noanonymous', 'noplaintext']) }}
