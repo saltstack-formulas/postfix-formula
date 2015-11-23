@@ -20,7 +20,7 @@ postmap_{{ filename }}:
     - source: salt://postfix/{{ filename }}
     - user: root
     - group: root
-    - mode: 0644
+    - mode: 644
     - template: jinja
     - require:
       - pkg: postfix
