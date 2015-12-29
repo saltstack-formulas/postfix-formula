@@ -55,6 +55,8 @@ postfix:
     smtp_tls_cert_file: /etc/postfix/ssl/example.com-relay-client-cert.crt
     smtp_tls_key_file: /etc/postfix/ssl/example.com-relay-client-cert.key
 
+    smtp_sasl_password_maps: hash:/etc/postfix/sasl_passwd
+
   certificates:
     server-cert:
       public_cert: |
@@ -81,3 +83,7 @@ postfix:
         -----BEGIN RSA PRIVATE KEY-----
         (Your Private key)
         -----END RSA PRIVATE KEY-----
+
+  mapping:
+    smtp_sasl_password_maps:
+      - "my-isp.tld:587": myaccount:supersecretpassword
