@@ -12,7 +12,7 @@ postfix:
     - watch:
       - pkg: postfix
 
-{%- macro postmap_file(filename) %}
+{%- macro postmap_file(filename, mode=644) %}
 {%- set file_path = '/etc/postfix/' ~ filename %}
 postmap_{{ filename }}:
   file.managed:
@@ -20,7 +20,7 @@ postmap_{{ filename }}:
     - source: salt://postfix/{{ filename }}
     - user: root
     - group: root
-    - mode: 644
+    - mode: {{ mode }}
     - template: jinja
     - require:
       - pkg: postfix
@@ -58,7 +58,7 @@ run-newaliases:
 
 # manage /etc/postfix/sasl_passwd if data found in pillar
 {% if 'sasl_passwd' in pillar.get('postfix', '') %}
-{{ postmap_file('sasl_passwd') }}
+{{ postmap_file('sasl_passwd', 600) }}
 {% endif %}
 
 # manage /etc/postfix/sender_canonical if data found in pillar
