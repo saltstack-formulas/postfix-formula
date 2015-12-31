@@ -57,6 +57,7 @@
 {{ set_parameter('smtpd_use_tls') }}
 {{ set_parameter('smtpd_tls_loglevel', 1) }}
 {{ set_parameter('smtpd_tls_security_level', 'may') }}
+{{ set_parameter('smtp_tls_CApath', '/etc/ssl/certs' }}
 {{ set_parameter('smtpd_tls_cert_file', '/etc/ssl/certs/ssl-cert-snakeoil.pem') }}
 {{ set_parameter('smtpd_tls_key_file', '/etc/ssl/private/ssl-cert-snakeoil.key') }}
 {{ set_parameter('smtpd_tls_session_cache_database', 'btree:${data_directory}/smtpd_scache') }}
