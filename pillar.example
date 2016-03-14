@@ -26,7 +26,7 @@ postfix:
 
   config:
     smtpd_banner: $myhostname ESMTP $mail_name
-    smtp_tls_CApath = /etc/ssl/certs
+    smtp_tls_CApath: /etc/ssl/certs
     biff: 'no'
     append_dot_mydomain: 'no'
     readme_directory: 'no'
