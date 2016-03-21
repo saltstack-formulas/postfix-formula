@@ -1,7 +1,7 @@
 # Managed by config management
-{% set virtual = salt['pillar.get']('postfix:virtual',{}) -%}
+{% set virtual = data -%}
 {# to have virtual file emptied, just set an empty key 'virtual' -#}
-{% if virtual is iterable -%}
+{% if virtual is mapping -%}
   {% for key, value in virtual.iteritems() -%}
     {# Mutiple values available for single key in virtual alias maps - ie for dist groups -#}
     {# We test if list was provided as value, and iterate if so -#}
@@ -14,4 +14,8 @@
 {{ key }}   {{ value }}
     {% endif -%}
   {% endfor -%}
+{% else %}
+{%- for item in virtual %}
+{{ item.keys()[0] }}	{{ item.values()[0] }}
+{%- endfor %}
 {% endif -%}
