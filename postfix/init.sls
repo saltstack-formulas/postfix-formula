@@ -46,7 +46,7 @@ postfix_{{ mapping }}:
     - source: salt://postfix/files/mapping.j2
     - user: root
     - group: root
-    {%- if mapping == 'smtp_sasl_password_maps' %}
+    {%- if mapping.endswith('_sasl_password_maps') %}
     - mode: 600
     {%- else %}
     - mode: 644
