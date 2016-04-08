@@ -1,0 +1,19 @@
+# Managed by config management
+
+{% if data is mapping -%}
+  {% for key, value in data.iteritems() -%}
+    {# Some settings, like virtual_alias_maps can take multiple values. Handle this case. -#}
+    {% if value is iterable and value is not string -%}
+      {% for item in value -%}
+{{ key }}	{{ item }}
+      {% endfor -%}
+    {% else -%}
+{{ key }}	{{ value }}
+    {% endif -%}
+  {% endfor -%}
+{% else -%}
+  {# Some settings need order, handle OrderedDict -#}
+  {% for item in data -%}
+{{ item.keys()[0] }}	{{ item.values()[0] }}
+{% endfor -%}
+{% endif -%}

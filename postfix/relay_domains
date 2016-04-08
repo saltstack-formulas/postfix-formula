@@ -1,7 +1,0 @@
-# Managed by config management
-{% set canonical = salt['pillar.get']('postfix:relay_domains',{}) -%}
-{% if canonical is iterable -%}
-{% for key,value in salt['pillar.get']('postfix:relay_domains',{}).iteritems() -%}
-{{ key }}  {{ value }}
-{% endfor %}
-{% endif %}
