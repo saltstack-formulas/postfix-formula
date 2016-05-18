@@ -3,6 +3,8 @@ postfix:
   master_config:
     enable_submission: False
 
+  enable_service: True
+
   virtual:
     groupaliasexample: 
      - someuser_1@example.com
