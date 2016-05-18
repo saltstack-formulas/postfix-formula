@@ -56,6 +56,11 @@ run-newaliases:
 {{ postmap_file('virtual') }}
 {% endif %}
 
+# manage /etc/postfix/relay_domains if data found in pillar
+{% if 'relay_domains' in pillar.get('postfix', '') %}
+{{ postmap_file('relay_domains') }}
+{% endif %}
+
 # manage /etc/postfix/sasl_passwd if data found in pillar
 {% if 'sasl_passwd' in pillar.get('postfix', '') %}
 {{ postmap_file('sasl_passwd', 600) }}

@@ -9,6 +9,9 @@ postfix:
      - someuser_2@example.com
     singlealiasexample: 'someuser_3@example.com'
 
+  relay_domains:
+    example.com: 'OK'
+
   sasl_passwd:
     smtp.example.com: 'somepassword'
 
