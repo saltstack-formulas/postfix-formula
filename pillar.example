@@ -3,6 +3,8 @@ postfix:
   master_config:
     enable_submission: False
 
+  enable_service: True
+
   virtual:
     groupaliasexample: 
      - someuser_1@example.com
@@ -18,6 +20,7 @@ postfix:
 
   postgrey:
     enabled: True
+    enable_service: True
     location: inet:172.16.0.5:6379
 
   policyd-spf:

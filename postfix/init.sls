@@ -6,7 +6,7 @@ postfix:
     - watch_in:
       - service: postfix
   service.running:
-    - enable: True
+    - enable: {{ salt['pillar.get']('postfix:enable_service', True) }}
     - require:
       - pkg: postfix
     - watch:
