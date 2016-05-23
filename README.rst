@@ -24,3 +24,13 @@ Installs and starts postfix SMTP server
 ------------------
 
 Manages postfix main.cf configuration file
+
+``postfix.policyd-spf``
+------------------
+
+Installs and configures policyd-spf
+
+``postfix.postgrey``
+------------------
+
+Installs and starts Postgrey service
