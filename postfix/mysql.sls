@@ -3,3 +3,5 @@
 mysql:
   pkg.installed:
     - name: {{ postfix.mysql_pkg }}
+    - watch_in:
+      - service: postfix

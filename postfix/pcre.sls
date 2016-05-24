@@ -3,3 +3,5 @@
 pcre:
   pkg.installed:
     - name: {{ postfix.pcre_pkg }}
+    - watch_in:
+      - service: postfix
