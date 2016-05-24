@@ -34,3 +34,13 @@ Installs and configures policyd-spf
 ------------------
 
 Installs and starts Postgrey service
+
+``postfix.mysql``
+------------------
+
+Installs postfix mysql package ( Debian only)
+
+``postfix.pcre``
+------------------
+
+Installs postfix pcre package ( Debian only)
