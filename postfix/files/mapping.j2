@@ -3,10 +3,7 @@
 {%- macro format_value(key, value) %}
   {#- Some settings, like virtual_alias_maps can take multiple values. Handle this case. -#}
   {%- if value is iterable and value is not string -%}
-{{ key }}	{% for item in value -%}
-    {{ item }}
-    {%- if not loop.last %}, {% endif %}
-    {%- endfor %}
+{{ key }}	{{ value|join(", ") }}
   {%- else -%}
 {{ key }}	{{ value }}
   {%- endif -%}
