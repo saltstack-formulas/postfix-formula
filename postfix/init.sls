@@ -12,25 +12,6 @@ postfix:
     - watch:
       - pkg: postfix
 
-{%- macro postmap_file(filename, mode=644) %}
-{%- set file_path = '/etc/postfix/' ~ filename %}
-postmap_{{ filename }}:
-  file.managed:
-    - name: {{ file_path }}
-    - source: salt://postfix/{{ filename }}
-    - user: root
-    - group: root
-    - mode: {{ mode }}
-    - template: jinja
-    - require:
-      - pkg: postfix
-  cmd.wait:
-    - name: /usr/sbin/postmap {{ file_path }}
-    - cwd: /
-    - watch:
-      - file: {{ file_path }}
-{%- endmacro %}
-
 # manage /etc/aliases if data found in pillar
 {% if 'aliases' in pillar.get('postfix', '') %}
 {{ postfix.aliases_file }}:
@@ -51,22 +32,37 @@ run-newaliases:
       - file: {{ postfix.aliases_file }}
 {% endif %}
 
-# manage /etc/postfix/virtual if data found in pillar
-{% if 'virtual' in pillar.get('postfix', '') %}
-{{ postmap_file('virtual') }}
-{% endif %}
-
-# manage /etc/postfix/relay_domains if data found in pillar
-{% if 'relay_domains' in pillar.get('postfix', '') %}
-{{ postmap_file('relay_domains') }}
-{% endif %}
-
-# manage /etc/postfix/sasl_passwd if data found in pillar
-{% if 'sasl_passwd' in pillar.get('postfix', '') %}
-{{ postmap_file('sasl_passwd', 600) }}
-{% endif %}
-
-# manage /etc/postfix/sender_canonical if data found in pillar
-{% if 'sender_canonical' in pillar.get('postfix', '') %}
-{{ postmap_file('sender_canonical') }}
-{% endif %}
+# manage various mappings
+{% for mapping, data in salt['pillar.get']('postfix:mapping', {}).items() %}
+  {%- set need_postmap = False %}
+  {%- set file_path = salt['pillar.get']('postfix:config:' ~ mapping) %}
+  {%- if ':' in file_path %}
+    {%- set file_path = file_path.split(':')[1] %}
+    {%- set need_postmap = True %}
+  {%- endif %}
+postfix_{{ mapping }}:
+  file.managed:
+    - name: {{ file_path }}
+    - source: salt://postfix/files/mapping.j2
+    - user: root
+    - group: root
+    {%- if mapping.endswith('_sasl_password_maps') %}
+    - mode: 600
+    {%- else %}
+    - mode: 644
+    {%- endif %}
+    - template: jinja
+    - context:
+        data: {{ data|json() }}
+    - require:
+      - pkg: postfix
+  {%- if need_postmap %}
+  cmd.wait:
+    - name: /usr/sbin/postmap {{ file_path }}
+    - cwd: /
+    - watch:
+      - file: {{ file_path }}
+    - watch_in:
+      - service: postfix
+  {%- endif %}
+{% endfor %}

@@ -1,0 +1,21 @@
+# Managed by config management
+
+{%- macro format_value(key, value) %}
+  {#- Some settings, like virtual_alias_maps can take multiple values. Handle this case. -#}
+  {%- if value is iterable and value is not string -%}
+{{ key }}	{{ value|join(", ") }}
+  {%- else -%}
+{{ key }}	{{ value }}
+  {%- endif -%}
+{%- endmacro %}
+
+{%- if data is mapping %}
+{% for key, value in data.iteritems() %}
+{{ format_value(key, value) }}
+{%- endfor -%}
+{%- else %}
+{#- Some settings need order, handle OrderedDict #}
+{% for item in data %}
+{{ format_value(item.keys()[0], item.values()[0]) }}
+{%- endfor -%}
+{%- endif %}

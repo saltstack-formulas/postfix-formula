@@ -5,22 +5,6 @@ postfix:
 
   enable_service: True
 
-  virtual:
-    groupaliasexample: 
-     - someuser_1@example.com
-     - someuser_2@example.com
-    singlealiasexample: 'someuser_3@example.com'
-
-  relay_domains:
-    example.com: 'OK'
-
-  sasl_passwd:
-    smtp.example.com: 'somepassword'
-
-  sender_canonical:
-    root: 'servers@example.com'
-    nagios: 'alerts@example.com'
-
   postgrey:
     enabled: True
     enable_service: True
@@ -62,6 +46,14 @@ postfix:
     smtp_tls_cert_file: /etc/postfix/ssl/example.com-relay-client-cert.crt
     smtp_tls_key_file: /etc/postfix/ssl/example.com-relay-client-cert.key
 
+    smtp_sasl_password_maps: hash:/etc/postfix/sasl_passwd
+
+    sender_canonical_maps: hash:/etc/postfix/sender_canonical
+
+    relay_recipient_maps: hash:/etc/postfix/relay_domains
+
+    virtual_alias_maps: hash:/etc/postfix/virtual
+
   certificates:
     server-cert:
       public_cert: |
@@ -88,3 +80,20 @@ postfix:
         -----BEGIN RSA PRIVATE KEY-----
         (Your Private key)
         -----END RSA PRIVATE KEY-----
+
+  mapping:
+    smtp_sasl_password_maps:
+      - smtp.example.com: myaccount:somepassword
+
+    sender_canonical_maps:
+      - root: servers@example.com
+      - nagios: alerts@example.com
+
+    relay_recipient_maps:
+      - example.com: OK
+
+    virtual_alias_maps:
+      - groupaliasexample:
+        - someuser_1@example.com
+        - someuser_2@example.com
+      - singlealiasexample: someuser_3@example.com
