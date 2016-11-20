@@ -1,0 +1,17 @@
+{% set config = salt['pillar.get']('postfix:vmail', {}) -%}
+{% macro set_parameter(parameter, default=None) -%}
+{% set value = config.get(parameter, default) -%}
+{% if value is not none -%}
+{{ parameter }} = {{ value }}
+{% endif -%}
+{% endmacro -%}
+
+{# Accept arbitrary parameters -#}
+{% for parameter in config -%}
+{{ set_parameter(parameter) }}
+{% endfor -%}
+
+{{ set_parameter('table', 'alias') }}
+{{ set_parameter('select_field', 'goto') }}
+{{ set_parameter('where_field', 'address') }}
+
