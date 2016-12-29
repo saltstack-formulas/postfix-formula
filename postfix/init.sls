@@ -12,6 +12,9 @@ postfix:
     - watch:
       - pkg: postfix
 
+{# Used for newaliases, postalias and postconf #}
+{%- set default_database_type = salt['pillar.get']('postfix:config:default_database_type', 'hash') %}
+
 # manage /etc/aliases if data found in pillar
 {% if 'aliases' in pillar.get('postfix', '') %}
 {{ postfix.aliases_file }}:
@@ -38,9 +41,11 @@ run-newaliases:
   {%- set file_path = salt['pillar.get']('postfix:config:' ~ mapping) %}
   {%- if ':' in file_path %}
     {%- set file_type, file_path = file_path.split(':') %}
-    {%- if file_type in ("btree", "cdb", "dbm", "hash", "sdbm") %}
-      {%- set need_postmap = True %}
-    {%- endif %}
+  {%- else %}
+    {%- set file_type = default_database_type %}
+  {%- endif %}
+  {%- if file_type in ("btree", "cdb", "dbm", "hash", "sdbm") %}
+    {%- set need_postmap = True %}
   {%- endif %}
 postfix_{{ mapping }}:
   file.managed:
