@@ -37,8 +37,10 @@ run-newaliases:
   {%- set need_postmap = False %}
   {%- set file_path = salt['pillar.get']('postfix:config:' ~ mapping) %}
   {%- if ':' in file_path %}
-    {%- set file_path = file_path.split(':')[1] %}
-    {%- set need_postmap = True %}
+    {%- set file_type, file_path = file_path.split(':') %}
+    {%- if file_type in ("btree", "cdb", "dbm", "hash", "sdbm") %}
+      {%- set need_postmap = True %}
+    {%- endif %}
   {%- endif %}
 postfix_{{ mapping }}:
   file.managed:
