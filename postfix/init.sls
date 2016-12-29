@@ -17,8 +17,19 @@ postfix:
 
 # manage /etc/aliases if data found in pillar
 {% if 'aliases' in pillar.get('postfix', '') %}
-{{ postfix.aliases_file }}:
+  {%- set need_newaliases = False %}
+  {%- set file_path = postfix.aliases_file %}
+  {%- if ':' in file_path %}
+    {%- set file_type, file_path = postfix.aliases_file.split(':') %}
+  {%- else %}
+    {%- set file_type = default_database_type %}
+  {%- endif %}
+  {%- if file_type in ("btree", "cdb", "dbm", "hash", "sdbm") %}
+    {%- set need_newaliases = True %}
+  {%- endif %}
+postfix_alias_database:
   file.managed:
+    - name: {{ file_path }}
     - source: salt://postfix/aliases
     - user: root
     - group: root
@@ -26,13 +37,13 @@ postfix:
     - template: jinja
     - require:
       - pkg: postfix
-
-run-newaliases:
+  {%- if need_newaliases %}
   cmd.wait:
     - name: newaliases
     - cwd: /
     - watch:
-      - file: {{ postfix.aliases_file }}
+      - file: {{ file_path }}
+  {%- endif %}
 {% endif %}
 
 # manage various mappings
