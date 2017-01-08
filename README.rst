@@ -44,3 +44,9 @@ Installs postfix mysql package ( Debian only)
 ------------------
 
 Installs postfix pcre package ( Debian only)
+
+
+``postfix.postsrsd``
+------------------
+
+Installs postfix postsrsd package
