@@ -74,7 +74,11 @@
 {{ set_parameter('myhostname', grains['fqdn']) }}
 {{ set_parameter('alias_maps', 'hash:' ~ postfix.aliases_file) }}
 {{ set_parameter('alias_database', 'hash:' ~ postfix.aliases_file) }}
+{%- if salt['pillar.get']('postfix:main_config:include_domain_in_mydestination', True) %}
 {{ set_parameter('mydestination', [grains['fqdn'], 'localhost', 'localhost.localdomain', grains['domain']]) }}
+{%- else %}
+{{ set_parameter('mydestination', [grains['fqdn'], 'localhost', 'localhost.localdomain']) }}
+{%- endif %}
 {{ set_parameter('relayhost', '') }}
 {{ set_parameter('mynetworks', ['127.0.0.0/8', '[::ffff:127.0.0.0]/104', '[::1]/128']) }}
 {{ set_parameter('mailbox_size_limit', '0') }}

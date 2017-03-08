@@ -2,6 +2,8 @@ postfix:
   manage_master_config: True
   master_config:
     enable_submission: False
+  main_config:
+    include_domain_in_mydestination: True
 
   enable_service: True
 
