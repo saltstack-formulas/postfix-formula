@@ -8,9 +8,7 @@
 {{ parameter }} = {{ value }}
   {%- elif value is iterable -%}
 {{ parameter }} =
-    {%- for v in value %}
-       {{ v }},
-    {%- endfor %}
+       {{ value | join(', ')}}
   {%- endif -%}
 {%- do processed_parameters.append(parameter) %}
 {%- endif %}
