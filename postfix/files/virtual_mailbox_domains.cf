@@ -1,3 +1,10 @@
+{%- if 'mysql' in salt['pillar.get']('postfix:config:virtual_mailbox_domains', '') %}
+{%- set config = salt['pillar.get']('postfix:mysql:virtual_mailbox_domains', {}) -%}
+{%- for key,value in salt['pillar.get']('postfix:vmail').items() %}
+{{ key }} = {{ value }}
+{%- endfor %}
+query = SELECT {{ config.select_field|default('1') }} FROM {{ config.table|default('virtual_domains') }} WHERE {{ config.where_field|default('name') }}='%s'
+{%- else %}
 {% set config = salt['pillar.get']('postfix:vmail', {}) -%}
 {% macro set_parameter(parameter, default=None) -%}
 {% set value = config.get(parameter, default) -%}
@@ -14,4 +21,4 @@
 {{ set_parameter('table', 'domain') }}
 {{ set_parameter('select_field', 'domain') }}
 {{ set_parameter('where_field', 'domain') }}
-
+{%- endif %}
