@@ -17,6 +17,7 @@ postfix:
 
 # manage /etc/aliases if data found in pillar
 {% if 'aliases' in pillar.get('postfix', '') %}
+{% if salt['pillar.get']('postfix:aliases:use_file', true) == true %}
   {%- set need_newaliases = False %}
   {%- set file_path = postfix.aliases_file %}
   {%- if ':' in file_path %}
@@ -44,6 +45,19 @@ postfix_alias_database:
     - watch:
       - file: {{ file_path }}
   {%- endif %}
+{% else %}
+  {%- for user, target in salt['pillar.get']('postfix:aliases:present', {}).items() %}
+postfix_alias_present_{{ user }}:
+  alias.present:
+    - name: {{ user }}
+    - target: {{ target }}
+  {%- endfor %}
+  {%- for user in salt['pillar.get']('postfix:aliases:absent', {}) %}
+postfix_alias_absent_{{ user }}:
+  alias.absent:
+    - name: {{ user }}
+  {%- endfor %}
+{% endif %}
 {% endif %}
 
 # manage various mappings
