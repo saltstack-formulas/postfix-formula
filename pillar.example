@@ -94,6 +94,21 @@ postfix:
     hosts: DB_HOST
     dbname: postfix_db
 
+  aliases:
+    # manage single aliases
+    # this uses the aliases file defined in the minion config, /etc/aliases by default
+    use_file: false
+    present:
+      root: info@example.com
+    absent:
+      - root
+
+    # manage entire aliases file
+    use_file: true
+    content: |
+      # Forward all local *nix users mail to our admins (via greedy regexp)
+      /.+/    admins@example.com
+
   certificates:
     server-cert:
       public_cert: |
