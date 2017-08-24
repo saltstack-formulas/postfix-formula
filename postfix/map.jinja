@@ -1,36 +1,74 @@
-{% set postfix = salt['grains.filter_by']({
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+
+{%- macro deep_merge(a, b) %}
+{#-     This whole `'dict' in x.__class__.__name__` mess is a
+        workaround for the missing mapping test in CentOS 6's
+        ancient Jinja2, see #193  #}
+{%-     for k,v in b.iteritems() %}
+{%-         if v is string or v is number %}
+{%-             do a.update({ k: v }) %}
+{%-         elif 'dict' not in v.__class__.__name__ %}
+{%-             if a[k] is not defined %}
+{%-                 do a.update({ k: v }) %}
+{%-             elif a[k] is iterable and 'dict' not in a[k].__class__.__name__ and
+                a[k] is not string %}
+{%-                 do a.update({ k: v|list + a[k]|list}) %}
+{%-             else %}
+{%-                 do a.update({ k: v }) %}
+{%-             endif %}
+{%-         elif 'dict' in v.__class__.__name__ %}
+{%-             if a[k] is not defined %}
+{%-                 do a.update({ k: v }) %}
+{%-             elif 'dict' in a[k].__class__.__name__ %}
+{%-                 do a.update({ k: v }) %}
+{%-             else %}
+{%-                 do deep_merge(a[k], v) %}
+{%-             endif %}
+{%-         else %}
+{%-            do a.update({ k: 'ERROR: case not contempled in merging!' }) %}
+{%-         endif %}
+{%-     endfor %}
+{%- endmacro %}
+
+
+{## Start with  defaults from defaults.yaml ##}
+{% import_yaml "postfix/defaults.yaml" as default_settings %}
+
+{##
+Setup variable using grains['os_family'] based logic, only add key:values here
+that differ from whats in defaults.yaml
+##}
+{% set osrelease = salt['grains.get']('osrelease') %}
+{# set salt_release = salt['pillar.get']('salt:release', 'latest') #}
+{# set postfix = salt['grains.filter_by'](#}
+{% set os_family_map = salt['grains.filter_by']({
     'Debian': {
-        'package': 'postfix',
         'policyd_spf_pkg': 'postfix-policyd-spf-python',
-        'postsrsd_pkg': 'postsrsd',
-        'postgrey_pkg': 'postgrey',
         'pcre_pkg': 'postfix-pcre',
         'mysql_pkg': 'postfix-mysql',
-        'service': 'postfix',
-        'aliases_file': '/etc/aliases',
     },
     'Gentoo': {
         'package': 'mail-mta/postfix',
         'policyd_spf_pkg': 'mail-filter/pypolicyd-spf',
-        'postsrsd_pkg': 'mail-filter/postsrsd',
         'postgrey_pkg': 'mail-filter/postgrey',
-        'service': 'postfix',
+        'postsrsd_pkg': 'mail-filter/postsrsd',
         'aliases_file': '/etc/mail/aliases',
     },
     'RedHat': {
-        'package': 'postfix',
         'policyd_spf_pkg': 'pypolicyd-spf',
-        'postsrsd_pkg': 'postsrsd',
-        'postgrey_pkg': 'postgrey',
-        'service': 'postfix',
-        'aliases_file': '/etc/aliases',
     },
     'Arch' : {
-        'package': 'postfix',
         'policyd_spf_pkg': 'python-postfix-policyd-spf',
-        'postsrsd_pkg': 'postsrsd',
-        'postgrey_pkg': 'postgrey',
-        'service': 'postfix',
-        'aliases_file': '/etc/aliases',
     },
 }, merge=salt['pillar.get']('postfix:lookup')) %}
+
+{## Merge the flavor_map to the default settings ##}
+{% do deep_merge(default_settings.postfix, os_family_map) %}
+
+{## Merge in postfix:lookup pillar ##}
+{% set postfix = salt['pillar.get'](
+    'postfix',
+    default=default_settings.postfix,
+    merge=True)
+%}
