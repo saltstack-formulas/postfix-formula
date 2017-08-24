@@ -7,4 +7,6 @@ postfix:
     package: postfix
     postsrsd_pkg: postsrsd
     postgrey_pkg: postgrey
+    root_grp: root
     service: postfix
+    xbin_prefix: /usr
