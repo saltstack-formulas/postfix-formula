@@ -33,7 +33,7 @@ postfix_alias_database:
     - name: {{ file_path }}
     - source: salt://postfix/aliases
     - user: root
-    - group: root
+    - group: {{ postfix.root_grp }}
     - mode: 644
     - template: jinja
     - require:
@@ -77,7 +77,7 @@ postfix_{{ mapping }}:
     - name: {{ file_path }}
     - source: salt://postfix/files/mapping.j2
     - user: root
-    - group: root
+    - group: {{ postfix.root_grp }}
     {%- if mapping.endswith('_sasl_password_maps') %}
     - mode: 600
     {%- else %}
@@ -90,7 +90,7 @@ postfix_{{ mapping }}:
       - pkg: postfix
   {%- if need_postmap %}
   cmd.wait:
-    - name: /usr/sbin/postmap {{ file_path }}
+    - name: {{ postfix.xbin_prefix }}/sbin/postmap {{ file_path }}
     - cwd: /
     - watch:
       - file: {{ file_path }}

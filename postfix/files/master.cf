@@ -133,5 +133,5 @@ scache    unix  -       -       n       -       1       scache
 #  ${nexthop} ${user}
 {% if salt['pillar.get']('postfix:policyd-spf:enabled', False) %}
 policy-spf  unix  -       n       n       -       -       spawn
-  user=nobody argv=/usr/bin/policyd-spf
+  user=nobody argv={{ xbin_prefix }}/bin/policyd-spf
 {%- endif %}
