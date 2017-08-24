@@ -1,7 +1,7 @@
 {%- from "postfix/map.jinja" import postfix with context -%}
 {%- set config = salt['pillar.get']('postfix:config', {}) -%}
+{#- TODO: alias_maps probably belongs here, too: #}
 {%- set processed_parameters = [
-        'aliases_file',
         'virtual_alias_maps',
         'smtp_sasl_password_maps',
         'sender_canonical_maps',
@@ -74,6 +74,7 @@
 {%- endif %}
 
 {{ set_parameter('myhostname', grains['fqdn']) }}
+{#- TODO: The following two may not be the same: #}
 {{ set_parameter('alias_maps', 'hash:' ~ postfix.aliases_file) }}
 {{ set_parameter('alias_database', 'hash:' ~ postfix.aliases_file) }}
 {{ set_parameter('mydestination', [grains['fqdn'], 'localhost', 'localhost.localdomain', grains['domain']]) }}

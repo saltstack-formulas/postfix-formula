@@ -36,6 +36,9 @@ postfix:
 
     # Alias
     alias_maps: hash:/etc/aliases
+    # This is the list of files for the newaliases
+    # cmd to process (see postconf(5) for details).
+    # Only local hash/btree/dbm files:
     alias_database: hash:/etc/aliases
 
     # Virtual users
