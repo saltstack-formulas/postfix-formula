@@ -72,6 +72,9 @@ postfix_alias_absent_{{ user }}:
   {%- else %}
     {%- set file_type = default_database_type %}
   {%- endif %}
+  {%- if not file_path.startswith('/') %}
+    {%- set file_path = postfix.config_path ~ '/' ~ file_path %}
+  {%- endif %}
   {%- if file_type in ("btree", "cdb", "dbm", "hash", "sdbm") %}
     {%- set need_postmap = True %}
   {%- endif %}
