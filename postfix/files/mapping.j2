@@ -1,11 +1,14 @@
 # Managed by config management
 
+{%- if colon is not defined %}
+  {%- set colon = False %}
+{%- endif %}
 {%- macro format_value(key, value) %}
   {#- Some settings, like virtual_alias_maps can take multiple values. Handle this case. -#}
   {%- if value is iterable and value is not string -%}
-{{ key }}	{{ value|join(", ") }}
+{{ key }}{% if colon %}:{% endif %}	{{ value|join(", ") }}
   {%- else -%}
-{{ key }}	{{ value }}
+{{ key }}{% if colon %}:{% endif %}	{{ value }}
   {%- endif -%}
 {%- endmacro %}
 

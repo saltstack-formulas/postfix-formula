@@ -31,11 +31,14 @@ postfix:
 postfix_alias_database:
   file.managed:
     - name: {{ file_path }}
-    - source: salt://postfix/aliases
+    - source: salt://postfix/files/mapping.j2
     - user: root
     - group: {{ postfix.root_grp }}
     - mode: 644
     - template: jinja
+    - context:
+        data: {{ salt['pillar.get']('postfix:aliases:present') }}
+        colon: True
     - require:
       - pkg: postfix
   {%- if need_newaliases %}
