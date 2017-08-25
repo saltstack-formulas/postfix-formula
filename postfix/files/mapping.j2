@@ -1,5 +1,7 @@
 # Managed by config management
-
+{#- Some files (mainly the aliases one) require key and values
+    to be separated with a colon. For this `colon: True` should
+    be passed to the template #}
 {%- if colon is not defined %}
   {%- set colon = False %}
 {%- endif %}
