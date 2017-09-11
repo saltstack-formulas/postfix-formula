@@ -191,6 +191,16 @@ postfix:
         -----END RSA PRIVATE KEY-----
 
   mapping:
+    virtual_mailbox_domains:
+      host: localhost
+      user: mysql
+      password: secret
+      dbname: config
+      query: |
+        SELECT domain
+        FROM vhosts
+        WHERE state = 'normal'
+
     smtp_sasl_password_maps:
       - smtp.example.com: myaccount:somepassword
 

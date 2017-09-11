@@ -1,0 +1,18 @@
+# Managed by config management
+
+{%- macro format_value(key, value) %}
+{#- We do special formatting for multiline values #}
+  {%- if value.count('\n') > 0 %}
+    {%- set lines = value.split('\n') %}
+{{ key }} = {{ lines[0].strip() }}
+    {%- for line in lines[1:] %}
+{{ ' ' * key | length ~ '   ' ~ line.strip() }} 
+    {%- endfor %}
+  {%- else -%}
+{{ key }} = {{ value }}
+  {%- endif -%}
+{%- endmacro %}
+
+{% for key, value in data.iteritems() %}
+{{ format_value(key, value) }}
+{%- endfor -%}

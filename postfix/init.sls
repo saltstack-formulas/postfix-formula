@@ -76,8 +76,10 @@ postfix_alias_absent_{{ user }}:
 {% for mapping, data in salt['pillar.get']('postfix:mapping', {}).items() %}
   {%- set need_postmap = False %}
   {%- set file_path = salt['pillar.get']('postfix:config:' ~ mapping) %}
-  {%- if ':' in file_path %}
+  {%- if ':' in file_path and not file_path.startswith('proxy:') %}
     {%- set file_type, file_path = file_path.split(':') %}
+  {%- elif ':' in file_path and file_path.startswith('proxy:') %}
+    {%- set file_proxy, file_type, file_path = file_path.split(':') %}
   {%- else %}
     {%- set file_type = default_database_type %}
   {%- endif %}
@@ -90,7 +92,11 @@ postfix_alias_absent_{{ user }}:
 postfix_{{ mapping }}:
   file.managed:
     - name: {{ file_path }}
+    {%- if file_type in ("ldap", "memcache", "mysql", "nisplus", "pgsql", "sqlite") %}
+    - source: salt://postfix/files/mapping-cf.j2
+    {%- else %}
     - source: salt://postfix/files/mapping.j2
+    {%- endif %}
     - user: root
     - group: {{ postfix.root_grp }}
     {%- if mapping.endswith('_sasl_password_maps') %}
