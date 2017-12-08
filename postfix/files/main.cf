@@ -1,11 +1,18 @@
 {%- from "postfix/map.jinja" import postfix with context -%}
 {%- set config = salt['pillar.get']('postfix:config', {}) -%}
+
+{%- if not salt['pillar.get']('postfix:mapping', False) %}
+{#- Let the user configure mapping manually. -#}
+{%- set processed_parameters = [] %}
+{%- else -%}
 {#- TODO: alias_maps probably belongs here, too: #}
 {%- set processed_parameters = [
         'virtual_alias_maps',
         'smtp_sasl_password_maps',
         'sender_canonical_maps',
     ] %}
+{%- endif -%}
+
 {%- macro set_parameter(parameter, default=None) -%}
 {% set value = config.get(parameter, default) %}
 {%- if value is not none %}
@@ -17,6 +24,7 @@
 {%- do processed_parameters.append(parameter) %}
 {%- endif %}
 {%- endmacro -%}
+
 # Managed by config management
 # See /usr/share/postfix/main.cf.dist for a commented, more complete version
 
