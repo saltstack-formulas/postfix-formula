@@ -1,0 +1,28 @@
+Debian:
+  policyd_spf_pkg: postfix-policyd-spf-python
+  postsrsd_pkg: postsrsd
+  postgrey_pkg: postgrey
+  pcre_pkg: postfix-pcre
+  mysql_pkg: postfix-mysql
+
+FreeBSD:
+  config_dir: /usr/local/etc/postfix
+  root_group: wheel
+
+Gentoo:
+  package: mail-mta/postfix
+  policyd_spf_pkg: mail-filter/pypolicyd-spf
+  postsrsd_pkg: mail-filter/postsrsd
+  postgrey_pkg: mail-filter/postgrey
+  aliases_file: /etc/mail/aliases
+
+RedHat:
+  policyd_spf_pkg: pypolicyd-spf
+  postsrsd_pkg: postsrsd
+  postgrey_pkg: postgrey
+
+Arch:
+  policyd_spf_pkg: python-postfix-policyd-spf
+  postsrsd_pkg: postsrsd
+  postgrey_pkg: postgrey
+

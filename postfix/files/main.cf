@@ -98,15 +98,15 @@ policy-spf_time_limit = {{ policyd_spf.get('time_limit', '3600s') }}
 {{ set_parameter('smtpd_recipient_restrictions', recipient_restrictions) }}
 
 {% if 'virtual' in pillar.get('postfix','') %}
-virtual_alias_maps = hash:/etc/postfix/virtual
+virtual_alias_maps = hash:{{ postfix.config_dir }}/virtual
 {% endif %}
 
 {% if 'sasl_passwd' in pillar.get('postfix','') %}
-smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_password_maps = hash:{{ postfix.config_dir }}/sasl_passwd
 {% endif %}
 
 {% if 'sender_canonical' in pillar.get('postfix','') %}
-sender_canonical_maps = hash:/etc/postfix/sender_canonical
+sender_canonical_maps = hash:{{ postfix.config_dir }}/sender_canonical
 {% endif %}
 
 {# Accept arbitrary parameters -#}
