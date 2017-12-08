@@ -2,11 +2,11 @@
 # vim: ft=yaml
 
 postfix:
-    aliases_file: /etc/aliases
-    config_path: /etc/postfix
-    package: postfix
-    postsrsd_pkg: postsrsd
-    postgrey_pkg: postgrey
-    root_grp: root
-    service: postfix
-    xbin_prefix: /usr
+  aliases_file: /etc/aliases
+  config_path: /etc/postfix
+  package: postfix
+  postsrsd_pkg: postsrsd
+  postgrey_pkg: postgrey
+  root_grp: root
+  service: postfix
+  xbin_prefix: /usr
