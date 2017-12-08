@@ -1,3 +1,5 @@
+{%- from "postfix/map.jinja" import postfix with context -%}
+
 {%- macro set_option(parameter, value) -%}
   {%- if value is number or value is string -%}
 -o {{ parameter }}={{ value }}
@@ -146,7 +148,12 @@ scache    unix  -       -       n       -       1       scache
 #mailman   unix  -       n       n       -       -       pipe
 #  flags=FR user=list argv=/usr/lib/mailman/bin/postfix-to-mailman.py
 #  ${nexthop} ${user}
-{% if salt['pillar.get']('postfix:policyd-spf:enabled', False) %}
+{%- if salt['pillar.get']('postfix:policyd-spf:enabled', False) %}
 policy-spf  unix  -       n       n       -       -       spawn
   user=nobody argv={{ xbin_prefix }}/bin/policyd-spf
 {%- endif %}
+{%- if master_config.get('enable_dovecot', False) -%}
+{%-   set dovecot = master_config.get('dovecot', {} )%}
+dovecot   unix  -       n       n       -       -       pipe
+  flags={{ dovecot.get('flags', 'DRhu') }} user={{ dovecot.get('user', 'vmail') }}:{{ dovecot.get('group', 'vmail') }} argv={{ dovecot.get('argv', postfix.dovecot_deliver) ~ ' -d ${recipient}' }}
+{% endif -%}

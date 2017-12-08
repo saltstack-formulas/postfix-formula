@@ -12,6 +12,7 @@ FreeBSD:
   xbin_prefix: /usr/local
   config_path: /usr/local/etc/postfix
   root_grp: wheel
+  dovecot_deliver: /usr/local/libexec/dovecot/deliver
 
 Gentoo:
   package: mail-mta/postfix

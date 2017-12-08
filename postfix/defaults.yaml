@@ -10,3 +10,4 @@ postfix:
   root_grp: root
   service: postfix
   xbin_prefix: /usr
+  dovecot_deliver: /usr/lib/dovecot/deliver
