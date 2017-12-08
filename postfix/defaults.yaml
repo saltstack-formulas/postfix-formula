@@ -3,3 +3,5 @@ postfix:
   service: postfix
   aliases_file: /etc/aliases
   config_dir: /etc/postfix
+  root_user: root
+  root_group: root

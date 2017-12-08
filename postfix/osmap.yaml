@@ -5,6 +5,10 @@ Debian:
   pcre_pkg: postfix-pcre
   mysql_pkg: postfix-mysql
 
+FreeBSD:
+  config_dir: /usr/local/etc/postfix
+  root_group: wheel
+
 Gentoo:
   package: mail-mta/postfix
   policyd_spf_pkg: mail-filter/pypolicyd-spf
