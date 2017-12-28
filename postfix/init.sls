@@ -31,7 +31,11 @@ postfix:
 postfix_alias_database:
   file.managed:
     - name: {{ file_path }}
+  {% if salt['pillar.get']('postfix:aliases:content', None) is string %}
+    - contents_pillar: postfix:aliases:content
+  {% else %}
     - source: salt://postfix/files/mapping.j2
+  {% endif %}
     - user: root
     - group: {{ postfix.root_grp }}
     - mode: 644
