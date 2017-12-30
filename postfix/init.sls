@@ -31,11 +31,18 @@ postfix:
 postfix_alias_database:
   file.managed:
     - name: {{ file_path }}
-    - source: salt://postfix/aliases
+  {% if salt['pillar.get']('postfix:aliases:content', None) is string %}
+    - contents_pillar: postfix:aliases:content
+  {% else %}
+    - source: salt://postfix/files/mapping.j2
+  {% endif %}
     - user: root
-    - group: root
+    - group: {{ postfix.root_grp }}
     - mode: 644
     - template: jinja
+    - context:
+        data: {{ salt['pillar.get']('postfix:aliases:present') }}
+        colon: True
     - require:
       - pkg: postfix
   {%- if need_newaliases %}
@@ -69,6 +76,9 @@ postfix_alias_absent_{{ user }}:
   {%- else %}
     {%- set file_type = default_database_type %}
   {%- endif %}
+  {%- if not file_path.startswith('/') %}
+    {%- set file_path = postfix.config_path ~ '/' ~ file_path %}
+  {%- endif %}
   {%- if file_type in ("btree", "cdb", "dbm", "hash", "sdbm") %}
     {%- set need_postmap = True %}
   {%- endif %}
@@ -77,7 +87,7 @@ postfix_{{ mapping }}:
     - name: {{ file_path }}
     - source: salt://postfix/files/mapping.j2
     - user: root
-    - group: root
+    - group: {{ postfix.root_grp }}
     {%- if mapping.endswith('_sasl_password_maps') %}
     - mode: 600
     {%- else %}
@@ -90,7 +100,7 @@ postfix_{{ mapping }}:
       - pkg: postfix
   {%- if need_postmap %}
   cmd.wait:
-    - name: /usr/sbin/postmap {{ file_path }}
+    - name: {{ postfix.xbin_prefix }}/sbin/postmap {{ file_path }}
     - cwd: /
     - watch:
       - file: {{ file_path }}

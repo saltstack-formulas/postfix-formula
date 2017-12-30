@@ -1,6 +1,18 @@
 {%- from "postfix/map.jinja" import postfix with context -%}
 {%- set config = salt['pillar.get']('postfix:config', {}) -%}
-{% set processed_parameters = ['aliases_file', 'virtual', 'sasl_passwd', 'sender_canonical'] %}
+
+{%- if not salt['pillar.get']('postfix:mapping', False) %}
+{#- Let the user configure mapping manually. -#}
+{%- set processed_parameters = [] %}
+{%- else -%}
+{#- TODO: alias_maps probably belongs here, too: #}
+{%- set processed_parameters = [
+        'virtual_alias_maps',
+        'smtp_sasl_password_maps',
+        'sender_canonical_maps',
+    ] %}
+{%- endif -%}
+
 {%- macro set_parameter(parameter, default=None) -%}
 {% set value = config.get(parameter, default) %}
 {%- if value is not none %}
@@ -12,6 +24,7 @@
 {%- do processed_parameters.append(parameter) %}
 {%- endif %}
 {%- endmacro -%}
+
 # Managed by config management
 # See /usr/share/postfix/main.cf.dist for a commented, more complete version
 
@@ -69,6 +82,7 @@
 {%- endif %}
 
 {{ set_parameter('myhostname', grains['fqdn']) }}
+{#- TODO: The following two may not be the same: #}
 {{ set_parameter('alias_maps', 'hash:' ~ postfix.aliases_file) }}
 {{ set_parameter('alias_database', 'hash:' ~ postfix.aliases_file) }}
 {{ set_parameter('mydestination', [grains['fqdn'], 'localhost', 'localhost.localdomain', grains['domain']]) }}
@@ -97,17 +111,22 @@ policy-spf_time_limit = {{ policyd_spf.get('time_limit', '3600s') }}
 {%- endif %}
 {{ set_parameter('smtpd_recipient_restrictions', recipient_restrictions) }}
 
-{% if 'virtual' in pillar.get('postfix','') %}
-virtual_alias_maps = hash:/etc/postfix/virtual
-{% endif %}
+{# From init.sls #}
+{%- set default_database_type = salt['pillar.get']('postfix:config:default_database_type', 'hash') %}
 
-{% if 'sasl_passwd' in pillar.get('postfix','') %}
-smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
-{% endif %}
+{%- for mapping, data in salt['pillar.get']('postfix:mapping', {}).items() %}
+  {%- set file_path = salt['pillar.get']('postfix:config:' ~ mapping) %}
+  {%- if ':' in file_path %}
+    {%- set file_type, file_path = file_path.split(':') %}
+  {%- else %}
+    {%- set file_type = default_database_type %}
+  {%- endif %}
+  {%- if not file_path.startswith('/') %}
+    {%- set file_path = postfix.config_path ~ '/' ~ file_path %}
+  {%- endif %}
 
-{% if 'sender_canonical' in pillar.get('postfix','') %}
-sender_canonical_maps = hash:/etc/postfix/sender_canonical
-{% endif %}
+{{ mapping }} = {{ file_type }}:{{ file_path }}
+{% endfor %}
 
 {# Accept arbitrary parameters -#}
 {% for parameter in config -%}

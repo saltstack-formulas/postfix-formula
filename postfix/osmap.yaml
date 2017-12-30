@@ -1,0 +1,25 @@
+Arch:
+  policyd_spf_pkg: python-postfix-policyd-spf
+
+Debian:
+  policyd_spf_pkg: postfix-policyd-spf-python
+  pcre_pkg: postfix-pcre
+  mysql_pkg: postfix-mysql
+
+FreeBSD:
+  policyd_spf_pkg: py27-postfix-policyd-spf-python
+  aliases_file: /etc/mail/aliases
+  xbin_prefix: /usr/local
+  config_path: /usr/local/etc/postfix
+  root_grp: wheel
+  dovecot_deliver: /usr/local/libexec/dovecot/deliver
+
+Gentoo:
+  package: mail-mta/postfix
+  policyd_spf_pkg: mail-filter/pypolicyd-spf
+  postsrsd_pkg: mail-filter/postsrsd
+  postgrey_pkg: mail-filter/postgrey
+  aliases_file: /etc/mail/aliases
+
+RedHat:
+  policyd_spf_pkg: pypolicyd-spf

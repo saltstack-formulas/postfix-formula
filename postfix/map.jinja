@@ -1,36 +1,15 @@
-{% set postfix = salt['grains.filter_by']({
-    'Debian': {
-        'package': 'postfix',
-        'policyd_spf_pkg': 'postfix-policyd-spf-python',
-        'postsrsd_pkg': 'postsrsd',
-        'postgrey_pkg': 'postgrey',
-        'pcre_pkg': 'postfix-pcre',
-        'mysql_pkg': 'postfix-mysql',
-        'service': 'postfix',
-        'aliases_file': '/etc/aliases',
-    },
-    'Gentoo': {
-        'package': 'mail-mta/postfix',
-        'policyd_spf_pkg': 'mail-filter/pypolicyd-spf',
-        'postsrsd_pkg': 'mail-filter/postsrsd',
-        'postgrey_pkg': 'mail-filter/postgrey',
-        'service': 'postfix',
-        'aliases_file': '/etc/mail/aliases',
-    },
-    'RedHat': {
-        'package': 'postfix',
-        'policyd_spf_pkg': 'pypolicyd-spf',
-        'postsrsd_pkg': 'postsrsd',
-        'postgrey_pkg': 'postgrey',
-        'service': 'postfix',
-        'aliases_file': '/etc/aliases',
-    },
-    'Arch' : {
-        'package': 'postfix',
-        'policyd_spf_pkg': 'python-postfix-policyd-spf',
-        'postsrsd_pkg': 'postsrsd',
-        'postgrey_pkg': 'postgrey',
-        'service': 'postfix',
-        'aliases_file': '/etc/aliases',
-    },
-}, merge=salt['pillar.get']('postfix:lookup')) %}
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+
+{% import_yaml "postfix/defaults.yaml" as defaults %}
+{% import_yaml "postfix/osmap.yaml" as osmap %}
+
+{% set postfix = salt['grains.filter_by'](
+    defaults,
+    merge=salt['grains.filter_by'](
+        osmap,
+        grain='os',
+        merge=salt['pillar.get']('postfix:lookup', {}),
+    ),
+    base='postfix')
+%}
