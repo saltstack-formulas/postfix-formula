@@ -15,7 +15,7 @@
 {%- endmacro %}
 
 {%- if data is mapping %}
-{% for key, value in data.iteritems() %}
+{% for key, value in data.items() %}
 {{ format_value(key, value) }}
 {%- endfor -%}
 {%- else %}
