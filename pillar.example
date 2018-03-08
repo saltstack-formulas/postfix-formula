@@ -1,7 +1,20 @@
 postfix:
   manage_master_config: True
   master_config:
+    enable_dovecot: False
+    # The following are the default values:
+    dovecot:
+      user: vmail
+      group: vmail
+      flags: DRhu
+      argv: "/usr/lib/dovecot/deliver -d ${recipient}"
+
     enable_submission: False
+    # To replace the defaults use this:
+    submission:
+      smtpd_tls_security_level: encrypt
+      smtpd_sasl_auth_enable: yes
+      smtpd_client_restrictions: permit_sasl_authenticated,reject
 
   enable_service: True
 
@@ -36,6 +49,9 @@ postfix:
 
     # Alias
     alias_maps: hash:/etc/aliases
+    # This is the list of files for the newaliases
+    # cmd to process (see postconf(5) for details).
+    # Only local hash/btree/dbm files:
     alias_database: hash:/etc/aliases
 
     # Virtual users
@@ -94,6 +110,7 @@ postfix:
     hosts: DB_HOST
     dbname: postfix_db
 
+  # add mysql query to virtual
   mysql:
     virtual_mailbox_domains:
       table: virtual_domains
@@ -107,6 +124,21 @@ postfix:
       table: virtual_users
       select_field: 1
       where_field: email
+
+  aliases:
+    # manage single aliases
+    # this uses the aliases file defined in the minion config, /etc/aliases by default
+    use_file: false
+    present:
+      root: info@example.com
+    absent:
+      - root
+
+    # manage entire aliases file
+    use_file: true
+    content: |
+      # Forward all local *nix users mail to our admins (via greedy regexp)
+      /.+/    admins@example.com
 
   certificates:
     server-cert:

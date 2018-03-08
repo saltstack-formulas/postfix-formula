@@ -1,3 +1,0 @@
-# Managed by config management
-# See man 5 aliases for format
-{{pillar['postfix']['aliases']}}
