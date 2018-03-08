@@ -1,3 +1,10 @@
+{%- if 'mysql' in salt['pillar.get']('postfix:config:virtual_alias_maps', '') %}
+{%- set config = salt['pillar.get']('postfix:mysql:virtual_alias_maps', {}) -%}
+{%- for key,value in salt['pillar.get']('postfix:vmail').items() %}
+{{ key }} = {{ value }}
+{%- endfor %}
+query = SELECT {{ config.select_field|default('destination') }} FROM {{ config.table|default('virtual_aliases') }} WHERE {{ config.where_field|default('email') }}='%s'
+{%- else %}
 {% set config = salt['pillar.get']('postfix:vmail', {}) -%}
 {% macro set_parameter(parameter, default=None) -%}
 {% set value = config.get(parameter, default) -%}
@@ -14,4 +21,4 @@
 {{ set_parameter('table', 'alias') }}
 {{ set_parameter('select_field', 'goto') }}
 {{ set_parameter('where_field', 'address') }}
-
+{%- endif %}

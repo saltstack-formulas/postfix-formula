@@ -110,6 +110,21 @@ postfix:
     hosts: DB_HOST
     dbname: postfix_db
 
+  # add mysql query to virtual
+  mysql:
+    virtual_mailbox_domains:
+      table: virtual_domains
+      select_field: 1
+      where_field: name
+    virtual_alias_maps:
+      table: virtual_aliases
+      select_field: destination
+      where_field: email
+    virtual_mailbox_maps:
+      table: virtual_users
+      select_field: 1
+      where_field: email
+
   aliases:
     # manage single aliases
     # this uses the aliases file defined in the minion config, /etc/aliases by default
