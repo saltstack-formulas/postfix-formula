@@ -1,14 +1,65 @@
 {%- from "postfix/map.jinja" import postfix with context -%}
+{%- set master_config = salt['pillar.get']('postfix:master_config', {}) -%}
+{%- from "postfix/services.jinja" import postfix_master_services_defaults, postfix_master_services_order -%}
 
-{%- macro set_option(parameter, value) -%}
-  {%- if value is number or value is string -%}
--o {{ parameter }}={{ value }}
-  {%- elif value is iterable -%}
--o {{ parameter }}={{ value | join(', ')}}
+{#-
+ # Handle the case that the pillar data does not provide any service
+ # configuration but submission parameters are provided in the pillar..
+ # This is important for backwards compatibility with sites that are using
+ # the previous enable_submission pillar settings.
+ -#}
+{%- set additional_services = {} -%}
+{%- if master_config.get('enable_submission', False) and not salt[
+        'pillar.get']('postfix:master_config:services:submission', False)  -%}
+{%-   do additional_services.update({'submission': {'chroot': False,
+                                                    'command': 'smtpd',
+                                                    'enable': True,
+                                                    'type': 'inet',
+                                                    'args': [],
+                                                    'private': False}}) -%}
+{%-   if master_config.get('submission', False) -%}
+{%-     for parameter, value in master_config.get('submission', {}).items() -%}
+{%-       if value is number or value is string -%}
+{%-         do additional_services['submission']['args'].append('-o %s=%s' % (
+                parameter, value)) -%}
+{%-       elif value is iterable -%}
+{%-         do additional_services['submission']['args'].append('-o %s=%s' % (
+                parameter, ', '.join(value))) -%}
+{%-       endif -%}
+{%-     endfor -%}
+{%-   else -%}
+{%-     do additional_services[
+             'submission']['args'].extend(['#  -o syslog_name=postfix/submission',
+                                           '-o smtpd_tls_security_level=encrypt',
+                                           '-o smtpd_sasl_auth_enable=yes',
+                                           '#  -o smtpd_reject_unlisted_recipient=no',
+                                           '#  -o smtpd_client_restrictions=$mua_client_restrictions',
+                                           '#  -o smtpd_helo_restrictions=$mua_helo_restrictions',
+                                           '#  -o smtpd_sender_restrictions=$mua_sender_restrictions',
+                                           '#  -o smtpd_recipient_restrictions=',
+                                           '#  -o smtpd_relay_restrictions=permit_sasl_authenticated,reject',
+                                           '#  -o milter_macro_daemon_name=ORIGINATING'
+                                          ]) -%}
+{%-   endif -%}
+{%- endif -%}
+
+{#- Format the postfix service parameters correctly -#}
+{%- macro service_param(service, service_name, parameter_name, default='-') -%}
+  {#- Fetch the value from the passed service dictionary or fall back to the
+   # service defaults by chaining .get() commands. #}
+  {%- set value = service.get(parameter_name,
+                      postfix_master_services_defaults[service_name].get(
+                        parameter_name, default)) -%}
+  {%- if value is sameas false -%}
+n
+  {%- elif value is sameas true -%}
+y
+  {%- elif value is number or value is string -%}
+{{ value }}
+  {%- else -%}
+-
   {%- endif -%}
 {%- endmacro -%}
-
-{% set master_config = salt['pillar.get']('postfix:master_config', {}) -%}
 
 #
 # Postfix master process configuration file.  For details on the format
@@ -21,67 +72,40 @@
 # service type  private unpriv  chroot  wakeup  maxproc command + args
 #               (yes)   (yes)   (no)    (never) (100)
 # ==========================================================================
-smtp      inet  n       -       n       -       -       smtpd
-#smtp      inet  n       -       n       -       1       postscreen
-#smtpd     pass  -       -       n       -       -       smtpd
-#dnsblog   unix  -       -       n       -       0       dnsblog
-#tlsproxy  unix  -       -       n       -       0       tlsproxy
-{%- if master_config.get('enable_submission', False) %}
-submission inet n       -       n       -       -       smtpd
-{%-  if master_config.get('submission', False) -%}
-{%     for parameter, value in master_config.get('submission', {}).items() %}
-  {{ set_option(parameter, value) }}
-{%-    endfor -%}
-{%   else %}
-#  -o syslog_name=postfix/submission
-  -o smtpd_tls_security_level=encrypt
-  -o smtpd_sasl_auth_enable=yes
-{%   endif %}
-#  -o smtpd_reject_unlisted_recipient=no
-#  -o smtpd_client_restrictions=$mua_client_restrictions
-#  -o smtpd_helo_restrictions=$mua_helo_restrictions
-#  -o smtpd_sender_restrictions=$mua_sender_restrictions
-#  -o smtpd_recipient_restrictions=
-#  -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
-#  -o milter_macro_daemon_name=ORIGINATING
-{% endif -%}
-#smtps     inet  n       -       n       -       -       smtpd
-#  -o syslog_name=postfix/smtps
-#  -o smtpd_tls_wrappermode=yes
-#  -o smtpd_sasl_auth_enable=yes
-#  -o smtpd_reject_unlisted_recipient=no
-#  -o smtpd_client_restrictions=$mua_client_restrictions
-#  -o smtpd_helo_restrictions=$mua_helo_restrictions
-#  -o smtpd_sender_restrictions=$mua_sender_restrictions
-#  -o smtpd_recipient_restrictions=
-#  -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
-#  -o milter_macro_daemon_name=ORIGINATING
-#628       inet  n       -       n       -       -       qmqpd
-pickup    unix  n       -       n       60      1       pickup
-cleanup   unix  n       -       n       -       0       cleanup
-qmgr      unix  n       -       n       300     1       qmgr
-#qmgr     unix  n       -       n       300     1       oqmgr
-tlsmgr    unix  -       -       n       1000?   1       tlsmgr
-rewrite   unix  -       -       n       -       -       trivial-rewrite
-bounce    unix  -       -       n       -       0       bounce
-defer     unix  -       -       n       -       0       bounce
-trace     unix  -       -       n       -       0       bounce
-verify    unix  -       -       n       -       1       verify
-flush     unix  n       -       n       1000?   0       flush
-proxymap  unix  -       -       n       -       -       proxymap
-proxywrite unix -       -       n       -       1       proxymap
-smtp      unix  -       -       n       -       -       smtp
-relay     unix  -       -       n       -       -       smtp
-#       -o smtp_helo_timeout=5 -o smtp_connect_timeout=5
-showq     unix  n       -       n       -       -       showq
-error     unix  -       -       n       -       -       error
-retry     unix  -       -       n       -       -       error
-discard   unix  -       -       n       -       -       discard
-local     unix  -       n       n       -       -       local
-virtual   unix  -       n       n       -       -       virtual
-lmtp      unix  -       -       n       -       -       lmtp
-anvil     unix  -       -       n       -       1       anvil
-scache    unix  -       -       n       -       1       scache
+{%- for service_name in postfix_master_services_order %}
+{#-   Try to get the service configuration from the pillar if present.
+ #    Next try if the service has been dynamically configured and is present in
+ #    the additional_services dictionary.
+ #    If absent, fall back to the defaults provided in services.jinja -#}
+{%-   set service = salt['pillar.get']('postfix:master_config:services:%s' % (
+                                         service_name,),
+                                         additional_services.get(service_name,
+                                         postfix_master_services_defaults[service_name])) -%}
+{%-   if service.get('enable', True) -%}
+{%-     set comment = '' -%}
+{%-   else -%}
+{%-     set comment = '#' -%}
+{%-   endif %}
+{{ "%s%-9s %-5s %-7s %-7s %-7s %-7s %-7s %s" | format(comment,
+                                               service_param(service, service_name, 'service', service_name),
+                                               service_param(service, service_name, 'type'),
+                                               service_param(service, service_name, 'private'),
+                                               service_param(service, service_name, 'unpriv'),
+                                               service_param(service, service_name, 'chroot'),
+                                               service_param(service, service_name, 'wakeup'),
+                                               service_param(service, service_name, 'maxproc'),
+                                               service_param(service, service_name, 'command', service_name)) -}}
+{%-   if service.args is not none -%}
+{%-     for option in service.get('args', postfix_master_services_defaults[
+                                            service_name].get('args', [])) -%}
+{%-       if option.startswith('#') %}
+{{ option }}
+{%-       else %}
+{{ comment }}  {{ option }}
+{%-       endif %}
+{%-     endfor %}
+{%-   endif %}
+{%- endfor %}
 #
 # ====================================================================
 # Interfaces to non-Postfix software. Be sure to examine the manual
