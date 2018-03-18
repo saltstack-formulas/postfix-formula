@@ -25,7 +25,10 @@
 {%- endif %}
 {%- endmacro -%}
 
-# Managed by config management
+#
+# This file is managed by salt.
+# Modify the salt pillar in the postfix formula that generates this file instead.
+#
 # See /usr/share/postfix/main.cf.dist for a commented, more complete version
 
 
