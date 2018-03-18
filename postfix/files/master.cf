@@ -62,6 +62,9 @@ y
 {%- endmacro -%}
 
 #
+# This file is managed by salt.
+# Modify the salt pillar in the postfix formula that generates this file instead.
+#
 # Postfix master process configuration file.  For details on the format
 # of the file, see the master(5) manual page (command: "man 5 master" or
 # on-line: http://www.postfix.org/master.5.html).
@@ -174,7 +177,7 @@ y
 #  ${nexthop} ${user}
 {%- if salt['pillar.get']('postfix:policyd-spf:enabled', False) %}
 policy-spf  unix  -       n       n       -       -       spawn
-  user=nobody argv={{ xbin_prefix }}/bin/policyd-spf
+  user=nobody argv={{ postfix.xbin_prefix }}/bin/policyd-spf
 {%- endif %}
 {%- if master_config.get('enable_dovecot', False) -%}
 {%-   set dovecot = master_config.get('dovecot', {} )%}
