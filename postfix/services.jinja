@@ -1,0 +1,261 @@
+{#-
+ #  Default Postfix master processes as defined by postfix
+ #
+ # The dictionary is keyed off the service name ("smtp", "smtpd", etc.) except
+ # for the few cases the service name is repeated to illustrate alternative
+ # options in the file.
+ # In such a case the second entry has a unique identifier appended, e.g.
+ # "smtp-unix". The 'service' attribute is used to provide the service name
+ # that will be rendered by jinja thus overriding the usual key to prevent
+ # clashes.
+-#}
+
+{% set postfix_master_services_defaults = {
+    'smtp': {
+        'type': 'inet',
+        'private': False,
+        'chroot': False,
+        'command': 'smtpd'
+    },
+    'smtp-postscreen': {
+        'service': 'smtp',
+        'enable': False,
+        'type': 'inet',
+        'maxproc': 1,
+        'private': False,
+        'chroot': False,
+        'command': 'postscreen'
+    },
+    'smtpd': {
+        'enable': False,
+        'type': 'pass',
+        'chroot': False
+    },
+    'dnsblog': {
+        'maxproc': 0,
+        'enable': False,
+        'type': 'unix',
+        'chroot': False
+    },
+    'tlsproxy': {
+        'maxproc': 0,
+        'enable': False,
+        'type': 'unix',
+        'chroot': False
+    },
+    'submission': {
+        'chroot': False,
+        'command': 'smtpd',
+        'enable': False,
+        'args': [
+            '-o syslog_name=postfix/submission',
+            '-o smtpd_tls_security_level=encrypt',
+            '-o smtpd_sasl_auth_enable=yes',
+            '-o smtpd_reject_unlisted_recipient=no',
+            '-o smtpd_client_restrictions=$mua_client_restrictions',
+            '-o smtpd_helo_restrictions=$mua_helo_restrictions',
+            '-o smtpd_sender_restrictions=$mua_sender_restrictions',
+            '-o smtpd_recipient_restrictions=permit_sasl_authenticated,reject',
+            '-o milter_macro_daemon_name=ORIGINATING'
+        ],
+        'type': 'inet',
+        'private': False
+    },
+    'smtps': {
+        'chroot': False,
+        'command': 'smtpd',
+        'enable': False,
+        'args': [
+            '-o syslog_name=postfix/smtps',
+            '-o smtpd_tls_wrappermode=yes',
+            '-o smtpd_sasl_auth_enable=yes',
+            '-o smtpd_reject_unlisted_recipient=no',
+            '-o smtpd_client_restrictions=$mua_client_restrictions',
+            '-o smtpd_helo_restrictions=$mua_helo_restrictions',
+            '-o smtpd_sender_restrictions=$mua_sender_restrictions',
+            '-o smtpd_recipient_restrictions=permit_sasl_authenticated,reject',
+            '-o milter_macro_daemon_name=ORIGINATING'
+        ],
+        'type': 'inet',
+        'private': False
+    },
+    '628': {
+        'enable': False,
+        'command': 'qmqpd',
+        'type': 'inet',
+        'chroot': False,
+        'private': False
+    },
+    'pickup': {
+        'maxproc': 1,
+        'chroot': False,
+        'wakeup': 60,
+        'type': 'unix',
+        'private': False,
+    },
+    'cleanup': {
+        'maxproc': 0,
+        'chroot': False,
+        'type': 'unix',
+        'private': False
+    },
+    'qmgr': {
+        'chroot': False,
+        'private': False,
+        'maxproc': 1,
+        'wakeup': 300,
+        'type': 'unix'
+    },
+    'qmgr-oqmgr': {
+        'service': 'qmgr',
+        'chroot': False,
+        'private': False,
+        'maxproc': 1,
+        'enable': False,
+        'command': 'oqmgr',
+        'wakeup': 300,
+        'type': 'unix'
+    },
+    'tlsmgr': {
+        'wakeup': '1000?',
+        'chroot': False,
+        'type': 'unix',
+        'maxproc': 1
+    },
+    'rewrite': {
+        'type': 'unix',
+        'chroot': False,
+        'command': 'trivial-rewrite'
+    },
+    'bounce': {
+        'maxproc': 0,
+        'chroot': False,
+        'type': 'unix'
+    },
+    'defer': {
+        'maxproc': 0,
+        'chroot': False,
+        'type': 'unix',
+        'command': 'bounce'
+    },
+    'trace': {
+        'maxproc': 0,
+        'chroot': False,
+        'type': 'unix',
+        'command': 'bounce'
+    },
+    'smtp-unix': {
+        'service': 'smtp',
+        'chroot': False,
+        'type': 'unix',
+        'command': 'smtp'
+    },
+    'verify': {
+        'maxproc': 1,
+        'chroot': False,
+        'type': 'unix'
+    },
+    'flush': {
+        'maxproc': 0,
+        'chroot': False,
+        'wakeup': '1000?',
+        'type': 'unix',
+        'private': False
+    },
+    'proxymap': {
+        'chroot': False,
+        'type': 'unix'
+    },
+    'proxywrite': {
+        'maxproc': 1,
+        'chroot': False,
+        'type': 'unix',
+        'command': 'proxymap'
+    },
+    'relay': {
+        'type': 'unix',
+        'chroot': False,
+        'args': [
+            '#       -o smtp_helo_timeout=5 -o smtp_connect_timeout=5'
+        ],
+        'command': 'smtp'
+    },
+    'showq': {
+        'chroot': False,
+        'type': 'unix',
+        'private': False
+    },
+    'error': {
+        'chroot': False,
+        'type': 'unix'
+    },
+    'retry': {
+        'type': 'unix',
+        'chroot': False,
+        'command': 'error'
+    },
+    'discard': {
+        'chroot': False,
+        'type': 'unix'
+    },
+    'local': {
+        'unpriv': False,
+        'chroot': False,
+        'type': 'unix'
+    },
+    'virtual': {
+        'unpriv': False,
+        'chroot': False,
+        'type': 'unix'
+    },
+    'lmtp': {
+        'chroot': False,
+        'type': 'unix'
+    },
+    'anvil': {
+        'maxproc': 1,
+        'chroot': False,
+        'type': 'unix'
+    },
+    'scache': {
+        'maxproc': 1,
+        'chroot': False,
+        'type': 'unix'
+    }
+} %}
+
+{# Service order inside the master.cf file #}
+{% set postfix_master_services_order = [
+    'smtp',
+    'smtp-postscreen',
+    'smtpd',
+    'dnsblog',
+    'tlsproxy',
+    'submission',
+    'smtps',
+    '628',
+    'pickup',
+    'cleanup',
+    'qmgr',
+    'qmgr-oqmgr',
+    'tlsmgr',
+    'rewrite',
+    'bounce',
+    'defer',
+    'trace',
+    'verify',
+    'flush',
+    'proxymap',
+    'proxywrite',
+    'smtp-unix',
+    'relay',
+    'showq',
+    'error',
+    'retry',
+    'discard',
+    'local',
+    'virtual',
+    'lmtp',
+    'anvil',
+    'scache'
+] %}

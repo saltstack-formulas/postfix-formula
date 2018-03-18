@@ -23,7 +23,7 @@ Installs and starts postfix SMTP server
 ``postfix.config``
 ------------------
 
-Manages postfix main.cf configuration file
+Manages postfix main.cf and optionally the master.cf configuration file
 
 ``postfix.policyd-spf``
 ------------------
