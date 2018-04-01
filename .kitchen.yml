@@ -1,0 +1,51 @@
+---
+driver:
+  name: docker
+
+driver_config:
+  use_sudo: false
+  privileged: true
+  provision_command: mkdir -p /run/sshd
+  run_command: /sbin/init
+
+platforms:
+  - name: debian-9
+  - name: ubuntu-17.10
+  - name: centos-7
+    driver_config:
+      image: saltstack/centos-7-minimal
+
+provisioner:
+  name: salt_solo
+  log_level: info
+  require_chef: false
+  salt_version: latest
+  formula: postfix
+  salt_copy_filter:
+    - .kitchen
+    - .git
+  pillars:
+    top.sls:
+      base:
+        '*':
+          - postfix
+    postfix.sls:
+      postfix:
+         manage_master_config: False
+
+verifier:
+  name: inspec
+  sudo: false
+  # cli, documentation, html, progress, json, json-min, json-rspec, junit
+  reporter: cli
+  inspec_tests:
+    - path: test/integration/default
+
+suites:
+  - name: postfix
+    provisioner:
+      state_top:
+        base:
+          '*':
+            - postfix
+            - postfix.config
