@@ -24,7 +24,7 @@
                 parameter, value)) -%}
 {%-       elif value is iterable -%}
 {%-         do additional_services['submission']['args'].append('-o %s=%s' % (
-                parameter, ', '.join(value))) -%}
+                parameter, ','.join(value))) -%}
 {%-       endif -%}
 {%-     endfor -%}
 {%-   else -%}
