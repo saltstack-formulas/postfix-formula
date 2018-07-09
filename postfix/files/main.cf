@@ -94,6 +94,7 @@
 {{ set_parameter('mailbox_size_limit', '0') }}
 {{ set_parameter('recipient_delimiter', '+') }}
 {{ set_parameter('inet_interfaces', 'all') }}
+{{ set_parameter('inet_protocols', 'all') }}
 {{ set_parameter('message_size_limit', '41943040') }}
 
 {%- if config.get('relayhost') %}
