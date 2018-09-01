@@ -129,7 +129,7 @@ policy-spf_time_limit = {{ policyd_spf.get('time_limit', '3600s') }}
     {%- set file_path = postfix.config_path ~ '/' ~ file_path %}
   {%- endif %}
 
-{{ mapping }} = {{ file_type }}:{{ file_path }}
+{{ set_parameter(mapping, file_type ~ ':' ~ file_path) }}
 {% endfor %}
 
 {# Accept arbitrary parameters -#}
