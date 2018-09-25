@@ -3,6 +3,10 @@
 postfix:
   pkg.installed:
     - name: {{ postfix.package }}
+{%- if grains['os_family']=="FreeBSD" %}
+    - force: True
+    - batch: True
+{%- endif %}
     - watch_in:
       - service: postfix
   service.running:
