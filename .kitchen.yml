@@ -6,14 +6,21 @@ driver_config:
   use_sudo: false
   privileged: true
   provision_command: mkdir -p /run/sshd
-  run_command: /sbin/init
+  run_command: /lib/systemd/systemd
 
 platforms:
   - name: debian-9
-  - name: ubuntu-17.10
+    driver_config:
+      provision_command:
+        - apt-get install udev net-tools -y
+  - name: ubuntu-18.04
+    driver_config:
+      provision_command:
+        - apt-get install udev net-tools -y
   - name: centos-7
     driver_config:
-      image: saltstack/centos-7-minimal
+      provision_command:
+        - yum install udev net-tools -y
 
 provisioner:
   name: salt_solo
@@ -35,9 +42,9 @@ provisioner:
 
 verifier:
   name: inspec
-  sudo: false
-  # cli, documentation, html, progress, json, json-min, json-rspec, junit
-  reporter: cli
+  sudo: true
+  reporter:
+    - cli
   inspec_tests:
     - path: test/integration/default
 
