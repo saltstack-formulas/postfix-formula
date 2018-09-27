@@ -8,4 +8,12 @@ services:
 before_install:
   - bundle install
 
-script: bundle exec kitchen verify
+env:
+  matrix:
+    - INSTANCE: postfix-debian-9
+    - INSTANCE: postfix-ubuntu-1804
+    - INSTANCE: postfix-centos-7
+
+script:
+  - bundle exec kitchen verify ${INSTANCE}
+
