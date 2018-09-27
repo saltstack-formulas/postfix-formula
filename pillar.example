@@ -36,6 +36,7 @@ postfix:
         chroot: True
 
   enable_service: True
+  reload_service: True
 
   postgrey:
     enabled: True

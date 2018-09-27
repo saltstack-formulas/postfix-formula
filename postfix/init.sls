@@ -11,6 +11,7 @@ postfix:
       - service: postfix
   service.running:
     - enable: {{ salt['pillar.get']('postfix:enable_service', True) }}
+    - reload: {{ salt['pillar.get']('postfix:reload_service', True) }}
     - require:
       - pkg: postfix
     - watch:
