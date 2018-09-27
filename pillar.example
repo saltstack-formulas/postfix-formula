@@ -34,6 +34,8 @@ postfix:
       tlsproxy:
         enable: True
         chroot: True
+      uucp:
+	enable: True
 
   enable_service: True
 
