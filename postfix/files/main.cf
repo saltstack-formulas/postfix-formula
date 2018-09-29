@@ -19,7 +19,7 @@
   {%- if value is number or value is string -%}
 {{ parameter }} = {{ value }}
   {%- elif value is iterable -%}
-{{ parameter }} = {{ value | join(', ')}}
+{{ parameter }} = {{ value | join('\n') | indent(parameter | length + 3) }}
   {%- endif -%}
 {%- do processed_parameters.append(parameter) %}
 {%- endif %}
