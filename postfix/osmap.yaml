@@ -20,6 +20,3 @@ Gentoo:
   postsrsd_pkg: mail-filter/postsrsd
   postgrey_pkg: mail-filter/postgrey
   aliases_file: /etc/mail/aliases
-
-RedHat:
-  policyd_spf_pkg: pypolicyd-spf

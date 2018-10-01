@@ -3,13 +3,18 @@
 
 {% import_yaml "postfix/defaults.yaml" as defaults %}
 {% import_yaml "postfix/osmap.yaml" as osmap %}
+{% import_yaml "postfix/os_familymap.yaml" as os_familymap %}
 
 {% set postfix = salt['grains.filter_by'](
     defaults,
     merge=salt['grains.filter_by'](
-        osmap,
-        grain='os',
-        merge=salt['pillar.get']('postfix:lookup', {}),
+        os_familymap,
+        grain='os_family',
+        merge=salt['grains.filter_by'](
+            osmap,
+            grain='os',
+            merge=salt['pillar.get']('postfix:lookup', {}),
+        ),
     ),
     base='postfix')
 %}
