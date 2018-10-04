@@ -1,0 +1,9 @@
+# Managed by config management
+
+{%- macro format_value(key, value) %}
+{{ key }} = {{ value | indent(key | length + 3) }}
+{%- endmacro %}
+
+{% for key, value in data.iteritems() %}
+{{ format_value(key, value) }}
+{%- endfor -%}
