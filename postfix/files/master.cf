@@ -111,13 +111,12 @@ y
 {%-   endif %}
 {%- endfor %}
 #
-{%- macro extra_service(service_name, wrap=False, force_enable=False) -%}
+{%- set handled_extra_services = [] -%}
+{%- macro extra_service(service_name, wrap=False) -%}
+{%-   do handled_extra_services.append(service_name) -%}
 {%-   set service = salt['pillar.get']('postfix:master_config:services:%s' % (
                                          service_name,),
                                          postfix_master_services_defaults[service_name]) -%}
-{%-   if force_enable -%}
-{%-     do service.update({'enable': True}) -%}
-{%-   endif -%}
 {%-   if service.get('enable', True) -%}
 {%-     set comment = '' -%}
 {%-   else -%}
@@ -149,7 +148,33 @@ y
 {%-   else %}
 {{      parameter_str }}
 {%-   endif -%}
-{%- endmacro %}
+{%- endmacro -%}
+
+{#- Handle legacy configuration of services for backwards compatibility
+    by extending the services dictionary accordingly #}
+{%- if salt['pillar.get']('postfix:policyd-spf:enabled', False) %}
+{%-   do postfix_master_services_defaults.update({'policy-spf': {
+                                                    'command': 'spawn',
+                                                    'chroot': False,
+                                                    'enable': True,
+                                                    'type': 'unix',
+                                                    'unpriv': False,
+                                                    'user': 'nobody',
+                                                    'argv': '%s/bin/policyd-spf' | format(postfix.xbin_prefix)}}) %}
+{%- endif %}
+{%- if master_config.get('enable_dovecot', False) -%}
+{%-   set dovecot = master_config.get('dovecot', {} )%}
+{%-   do postfix_master_services_defaults.update({'dovecot': {
+                                                    'command': 'pipe',
+                                                    'chroot': False,
+                                                    'enable': True,
+                                                    'extras': '-d ${recipient}',
+                                                    'flags': dovecot.get('flags', 'DRhu'),
+                                                    'type': 'unix',
+                                                    'unpriv': False,
+                                                    'user': '%s:%s' | format(dovecot.get('user', 'vmail'), dovecot.get('group', 'vmail')),
+                                                    'argv': dovecot.get('argv', postfix.dovecot_deliver) }}) %}
+{%- endif %}
 # ====================================================================
 # Interfaces to non-Postfix software. Be sure to examine the manual
 # pages of the non-Postfix software to find out what options it wants.
@@ -205,13 +230,17 @@ y
 {{ extra_service('scalemail-backend', 79) }}
 #
 {{ extra_service('mailman', 79) }}
-{%- if salt['pillar.get']('postfix:policyd-spf:enabled', False) %}
+{#- Handle custom services configured as pillars by extending the services
+    dictionary for all defined services that have not been otherwise be
+    handled yet. -#}
+{%- for service in salt['pillar.get']('postfix:master_config:services', []) if not service in handled_extra_services -%}
+{%-  do postfix_master_services_defaults.update({service: salt['pillar.get']('postfix:master_config:services:%s' % (service,))}) -%}
+{%- endfor -%}
+{%- for service in postfix_master_services_defaults if not service in handled_extra_services and not service in postfix_master_services_order %}
 #
-{{ extra_service('policy-spf', False, True) }}
-{%- endif %}
-{%- if master_config.get('enable_dovecot', False) -%}
-{%-   set dovecot = master_config.get('dovecot', {} )%}
-#
-dovecot   unix  -       n       n       -       -       pipe
-  flags={{ dovecot.get('flags', 'DRhu') }} user={{ dovecot.get('user', 'vmail') }}:{{ dovecot.get('group', 'vmail') }} argv={{ dovecot.get('argv', postfix.dovecot_deliver) ~ ' -d ${recipient}' }}
-{% endif -%}
+{%-   if postfix_master_services_defaults[service].get('wrap', False) %}
+{{      extra_service(service, 78) }}
+{%-   else %}
+{{      extra_service(service) }}
+{%-   endif %}
+{%- endfor %}

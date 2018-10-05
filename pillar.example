@@ -7,7 +7,7 @@ postfix:
       user: vmail
       group: vmail
       flags: DRhu
-      argv: "/usr/lib/dovecot/deliver -d ${recipient}"
+      argv: "/usr/lib/dovecot/deliver"
 
     enable_submission: False
     # To replace the defaults use this:
@@ -36,6 +36,14 @@ postfix:
         chroot: True
       uucp:
 	enable: True
+      custom-mda:
+        argv: /usr/local/sbin/mail-handler.py
+        command: pipe
+        extras: --rcpt ${recipient}
+        flags: DRhu
+        user: mail
+        # Wrap the output in master.cf at 78 chars for better readability
+        wrap: True
 
   enable_service: True
   reload_service: True
