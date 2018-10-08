@@ -13,6 +13,7 @@ env:
     - INSTANCE: postfix-debian-9
     - INSTANCE: postfix-ubuntu-1804
     - INSTANCE: postfix-centos-7
+    - INSTANCE: postfix-fedora-latest
 
 script:
   - bundle exec kitchen verify ${INSTANCE}
