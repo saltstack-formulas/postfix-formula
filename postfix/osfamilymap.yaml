@@ -20,6 +20,7 @@ Gentoo:
   postsrsd_pkg: mail-filter/postsrsd
   postgrey_pkg: mail-filter/postgrey
   aliases_file: /etc/mail/aliases
+  dovecot_deliver: /usr/libexec/dovecot/deliver
 
 RedHat:
   policyd_spf_pkg: pypolicyd-spf
