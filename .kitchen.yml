@@ -21,6 +21,10 @@ platforms:
     driver_config:
       provision_command:
         - yum install udev net-tools -y
+  - name: fedora-latest
+    driver_config:
+      provision_command:
+        - yum install udev net-tools -y
 
 provisioner:
   name: salt_solo
@@ -38,7 +42,7 @@ provisioner:
           - postfix
     postfix.sls:
       postfix:
-         manage_master_config: False
+         manage_master_config: True
 
 verifier:
   name: inspec

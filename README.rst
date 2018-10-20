@@ -8,6 +8,7 @@ Formulas to set up and configure the Postfix mail transfer agent.
     See the full `Salt Formulas installation and usage instructions
     <http://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html>`_.
 
+
 Available states
 ================
 
@@ -50,3 +51,12 @@ Installs postfix pcre package ( Debian only)
 ------------------
 
 Installs postfix postsrsd package
+
+
+Integration testing
+===================
+
+A rudimentary test-suite exists to verify basic functionality of the postfix-formula.
+Testing is done using the [Kitchen CI Framework](https://kitchen.ci/). Pull-Requests are verified using [Travis CI](https://travis-ci.org/).
+
+A general getting started guide for kitchen-salt can be found at <https://github.com/saltstack/kitchen-salt/blob/master/docs/gettingstarted.md>.

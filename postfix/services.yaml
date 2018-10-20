@@ -1,0 +1,344 @@
+#  Default Postfix master processes as defined by postfix
+#
+# The dictionary is keyed off the service name ("smtp", "smtpd", etc.) except
+# for the few cases the service name is repeated to illustrate alternative
+# options in the file.
+# In such a case the second entry has a unique identifier appended, e.g.
+# "smtp-unix". The 'service' attribute is used to provide the service name
+# that will be rendered thus overriding the usual key to prevent clashes.
+#
+
+defaults:
+# Postfix internal services/processes defaults
+  smtp:
+    chroot: false
+    command: smtpd
+    private: false
+    type: inet
+
+  smtp-postscreen:
+    chroot: false
+    command: postscreen
+    enable: false
+    maxproc: 1
+    private: false
+    service: smtp
+    type: inet
+
+  smtpd:
+    chroot: false
+    enable: false
+    type: pass
+
+  dnsblog:
+    chroot: false
+    enable: false
+    maxproc: 0
+    type: unix
+
+  tlsproxy:
+    chroot: false
+    enable: false
+    maxproc: 0
+    type: unix
+
+  submission:
+    args:
+      - '-o syslog_name=postfix/submission'
+      - '-o smtpd_tls_security_level=encrypt'
+      - '-o smtpd_sasl_auth_enable=yes'
+      - '-o smtpd_reject_unlisted_recipient=no'
+      - '-o smtpd_client_restrictions=$mua_client_restrictions'
+      - '-o smtpd_helo_restrictions=$mua_helo_restrictions'
+      - '-o smtpd_sender_restrictions=$mua_sender_restrictions'
+      - '-o smtpd_recipient_restrictions=permit_sasl_authenticated,reject'
+      - '-o milter_macro_daemon_name=ORIGINATING'
+    chroot: false
+    command: smtpd
+    enable: false
+    private: false
+    type: inet
+
+  smtps:
+    args:
+      - '-o syslog_name=postfix/smtps'
+      - '-o smtpd_tls_wrappermode=yes'
+      - '-o smtpd_sasl_auth_enable=yes'
+      - '-o smtpd_reject_unlisted_recipient=no'
+      - '-o smtpd_client_restrictions=$mua_client_restrictions'
+      - '-o smtpd_helo_restrictions=$mua_helo_restrictions'
+      - '-o smtpd_sender_restrictions=$mua_sender_restrictions'
+      - '-o smtpd_recipient_restrictions=permit_sasl_authenticated,reject'
+      - '-o milter_macro_daemon_name=ORIGINATING'
+    chroot: false
+    command: smtpd
+    enable: false
+    private: false
+    type: inet
+
+  '628':
+    chroot: false
+    command: qmqpd
+    enable: false
+    private: false
+    type: inet
+
+  pickup:
+    chroot: false
+    maxproc: 1
+    private: false
+    type: unix
+    wakeup: 60
+
+  cleanup:
+    chroot: false
+    maxproc: 0
+    private: false
+    type: unix
+
+  qmgr:
+    chroot: false
+    maxproc: 1
+    private: false
+    type: unix
+    wakeup: 300
+
+  qmgr-oqmgr:
+    chroot: false
+    command: oqmgr
+    enable: false
+    maxproc: 1
+    private: false
+    service: qmgr
+    type: unix
+    wakeup: 300
+
+  tlsmgr:
+    chroot: false
+    maxproc: 1
+    type: unix
+    wakeup: '1000?'
+
+  rewrite:
+    chroot: false
+    command: trivial-rewrite
+    type: unix
+
+  bounce:
+    chroot: false
+    maxproc: 0
+    type: unix
+
+  defer:
+    chroot: false
+    command: bounce
+    maxproc: 0
+    type: unix
+
+  trace:
+    chroot: false
+    command: bounce
+    maxproc: 0
+    type: unix
+
+  smtp-unix:
+    chroot: false
+    command: smtp
+    service: smtp
+    type: unix
+
+  verify:
+    chroot: false
+    maxproc: 1
+    type: unix
+
+  flush:
+    chroot: false
+    maxproc: 0
+    private: false
+    type: unix
+    wakeup: '1000?'
+
+  proxymap:
+    chroot: false
+    type: unix
+
+  proxywrite:
+    chroot: false
+    command: proxymap
+    maxproc: 1
+    type: unix
+
+  relay:
+    args:
+      - '#       -o smtp_helo_timeout=5 -o smtp_connect_timeout=5'
+    chroot: false
+    command: smtp
+    type: unix
+
+  showq:
+    chroot: false
+    private: false
+    type: unix
+
+  error:
+    chroot: false
+    type: unix
+
+  retry:
+    chroot: false
+    command: error
+    type: unix
+
+  discard:
+    chroot: false
+    type: unix
+
+  local:
+    chroot: false
+    type: unix
+    unpriv: false
+
+  virtual:
+    chroot: false
+    type: unix
+    unpriv: false
+
+  lmtp:
+    chroot: false
+    type: unix
+
+  anvil:
+    chroot: false
+    maxproc: 1
+    type: unix
+
+  scache:
+    chroot: false
+    maxproc: 1
+    type: unix
+
+# Postfix MDA definitions, these are optional and commented out by default
+  maildrop:
+    argv: /usr/local/bin/maildrop
+    chroot: false
+    command: pipe
+    enable: false
+    extras: '-d ${recipient}'
+    flags: DRhu
+    type: unix
+    unpriv: false
+    user: vmail
+
+  cyrus:
+    argv: /cyrus/bin/deliver
+    chroot: false
+    command: pipe
+    enable: false
+    extras: "-e -r ${sender} -m ${extension} ${user}"
+    type: unix
+    unpriv: false
+    user: cyrus
+
+  old-cyrus:
+    argv: /cyrus/bin/deliver
+    chroot: false
+    command: pipe
+    enable: false
+    extras: '-e -m ${extension} ${user}'
+    flags: R
+    type: unix
+    unpriv: false
+    user: cyrus
+
+  uucp:
+    argv: uux
+    chroot: false
+    command: pipe
+    enable: false
+    extras: '-r -n -z -a$sender - $nexthop!rmail ($recipient)'
+    flags: Fqhu
+    type: unix
+    unpriv: false
+    user: uucp
+
+  ifmail:
+    argv: /usr/lib/ifmail/ifmail
+    chroot: false
+    command: pipe
+    enable: false
+    extras: '-r $nexthop ($recipient)'
+    flags: F
+    type: unix
+    unpriv: false
+    user: ftn
+
+  bsmtp:
+    argv: /usr/local/sbin/bsmtp
+    chroot: false
+    command: pipe
+    enable: false
+    extras: '-f $sender $nexthop $recipient'
+    flags: Fq.
+    type: unix
+    unpriv: false
+    user: bsmtp
+
+  scalemail-backend:
+    argv: /usr/lib/scalemail/bin/scalemail-store
+    chroot: false
+    command: pipe
+    enable: false
+    extras: '${nexthop} ${user} ${extension}'
+    flags: R
+    maxproc: 2
+    type: unix
+    unpriv: false
+    user: scalemail
+
+  mailman:
+    argv: /usr/lib/mailman/bin/postfix-to-mailman.py
+    chroot: false
+    command: pipe
+    enable: false
+    extras: '${nexthop} ${user}'
+    flags: FR
+    type: unix
+    unpriv: false
+    user: list
+
+
+# Service order inside the master.cf file
+order:
+  - smtp
+  - smtp-postscreen
+  - smtpd
+  - dnsblog
+  - tlsproxy
+  - submission
+  - smtps
+  - '628'
+  - pickup
+  - cleanup
+  - qmgr
+  - qmgr-oqmgr
+  - tlsmgr
+  - rewrite
+  - bounce
+  - defer
+  - trace
+  - verify
+  - flush
+  - proxymap
+  - proxywrite
+  - smtp-unix
+  - relay
+  - showq
+  - error
+  - retry
+  - discard
+  - local
+  - virtual
+  - lmtp
+  - anvil
+  - scache
