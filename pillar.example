@@ -1,23 +1,9 @@
 postfix:
   manage_master_config: True
   master_config:
-    enable_dovecot: False
-    # The following are the default values:
-    dovecot:
-      user: vmail
-      group: vmail
-      flags: DRhu
-      argv: "/usr/lib/dovecot/deliver"
-
-    enable_submission: False
-    # To replace the defaults use this:
-    submission:
-      smtpd_tls_security_level: encrypt
-      smtpd_sasl_auth_enable: yes
-      smtpd_client_restrictions: permit_sasl_authenticated,reject
-
-    # Alternative way of managing services allowing for much more finegrained
-    # control over each service. See postfix/services.jinja for details.
+    # Preferred way of managing services/processes. This allows for finegrained
+    # control over each service. See postfix/services.yaml for defaults that can
+    # be overridden.
     services:
       smtp:
         # Limit to no more than 10 smtp processes
@@ -25,6 +11,7 @@ postfix:
       # Enable oldstyle TLS wrapped SMTP
       smtps:
         enable: True
+      # Enable submission service on port 587/tcp with custom options
       submission:
         enable: True
         args:
@@ -36,6 +23,20 @@ postfix:
         chroot: True
       uucp:
 	enable: True
+      # Dovecot delivery via deliver binary. For better performance, investigate
+      # using LMTP instead: <https://wiki.dovecot.org/LMTP>
+      dovecot:
+        chroot: False
+        command: pipe
+        enable: True
+        extras: '-d ${recipient}'
+        flags: DRhu
+        type: unix
+        unpriv: False
+        user: vmail:vmail
+        argv: /usr/lib/dovecot/deliver
+      # Completely customized mail-delivery-agent entry. Will be appended to the
+      # master.cf file
       custom-mda:
         argv: /usr/local/sbin/mail-handler.py
         command: pipe
@@ -44,6 +45,23 @@ postfix:
         user: mail
         # Wrap the output in master.cf at 78 chars for better readability
         wrap: True
+
+    # Backwards compatible definition of dovecot delivery in master.cf
+    enable_dovecot: False
+    # The following are the default values:
+    dovecot:
+      user: vmail
+      group: vmail
+      flags: DRhu
+      argv: "/usr/lib/dovecot/deliver"
+
+    # Backwards compatible definition of submission listener in master.cf
+    enable_submission: False
+    # To replace the defaults use this:
+    submission:
+      smtpd_tls_security_level: encrypt
+      smtpd_sasl_auth_enable: yes
+      smtpd_client_restrictions: permit_sasl_authenticated,reject
 
   enable_service: True
   reload_service: True
