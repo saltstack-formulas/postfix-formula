@@ -76,7 +76,10 @@ postfix_alias_absent_{{ user }}:
 {% for mapping, data in salt['pillar.get']('postfix:mapping', {}).items() %}
   {%- set need_postmap = False %}
   {%- set file_path = salt['pillar.get']('postfix:config:' ~ mapping) %}
-  {%- if ':' in file_path %}
+  {%- if file_path.startswith('proxy:') %}
+    {#- Discard the proxy:-prefix #}
+    {%- set _, file_type, file_path = file_path.split(':') %}
+  {%- elif ':' in file_path %}
     {%- set file_type, file_path = file_path.split(':') %}
   {%- else %}
     {%- set file_type = default_database_type %}
