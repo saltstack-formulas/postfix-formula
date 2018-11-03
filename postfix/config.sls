@@ -71,6 +71,7 @@ include:
       - pkg: postfix
     - watch_in:
       - service: postfix
+      - module: postfix_restart
     - template: jinja
 {% endif %}
 
@@ -116,3 +117,12 @@ postfix_{{ domain }}_ssl_key:
        - service: postfix
 
 {% endfor %}
+
+# Inert by default.
+# Can be used by other states to trigger a restart.
+postfix_restart:
+  module.wait:
+    - name: service.restart
+    - m_name: postfix
+    - require:
+      - service: postfix
