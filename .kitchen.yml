@@ -43,6 +43,23 @@ provisioner:
     postfix.sls:
       postfix:
          manage_master_config: True
+         master_config:
+           services:
+             relay1:
+               wrap: True
+               command: smtp
+               chroot: false
+               type: unix
+               extras: '-o smtp_bind_address=127.0.0.1 -o syslog_name=relay1'
+               no_args: True
+             relay2:
+               wrap: True
+               command: smtp
+               chroot: false
+               type: unix
+               extras: '-o smtp_bind_address=127.0.0.2 -o syslog_name=relay2'
+               no_args: True
+
 
 verifier:
   name: inspec

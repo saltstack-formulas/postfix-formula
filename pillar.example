@@ -22,7 +22,7 @@ postfix:
         enable: True
         chroot: True
       uucp:
-	enable: True
+        enable: True
       # Dovecot delivery via deliver binary. For better performance, investigate
       # using LMTP instead: <https://wiki.dovecot.org/LMTP>
       dovecot:
@@ -45,6 +45,9 @@ postfix:
         user: mail
         # Wrap the output in master.cf at 78 chars for better readability
         wrap: True
+        # Avoid user and arvg settings to allow define internal processes
+        # needed for randomizing relay IP (randmap functionality)
+        no_args: True
 
     # Backwards compatible definition of dovecot delivery in master.cf
     enable_dovecot: False
