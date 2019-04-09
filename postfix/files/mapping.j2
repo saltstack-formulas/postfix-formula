@@ -21,6 +21,7 @@
 {%- else %}
 {#- Some settings need order, handle OrderedDict #}
 {% for item in data %}
-{{ format_value(item.keys()[0], item.values()[0]) }}
+{%-   set key, value = item.popitem() %}
+{{ format_value(key, value) }}
 {%- endfor -%}
 {%- endif %}
