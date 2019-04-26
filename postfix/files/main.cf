@@ -1,17 +1,8 @@
 {%- from "postfix/map.jinja" import postfix with context -%}
 {%- set config = salt['pillar.get']('postfix:config', {}) -%}
 
-{%- if not salt['pillar.get']('postfix:mapping', False) %}
-{#- Let the user configure mapping manually. -#}
-{%- set processed_parameters = [] %}
-{%- else -%}
-{#- TODO: alias_maps probably belongs here, too: #}
-{%- set processed_parameters = [
-        'virtual_alias_maps',
-        'smtp_sasl_password_maps',
-        'sender_canonical_maps',
-    ] %}
-{%- endif -%}
+{#- " | list": Python3.6 retuns dict_keys here, which needs to be converted into a list here. -#}
+{%- set processed_parameters = salt['pillar.get']('postfix:mapping', {}).keys() | list %}
 
 {%- macro set_parameter(parameter, default=None) -%}
 {% set value = config.get(parameter, default) %}
