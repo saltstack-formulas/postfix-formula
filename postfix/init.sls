@@ -17,6 +17,16 @@ postfix:
     - watch:
       - pkg: postfix
 
+{%- if salt['pillar.get']('postfix:reload_service', True) %}
+# Restart postfix if the package was changed.
+# This also provides an ID to be used in a watch_in statement.
+postfix_service_restart:
+  service.running:
+    - name: postfix
+    - watch:
+      - pkg: postfix
+{%- endif %}
+
 {# Used for newaliases, postalias and postconf #}
 {%- set default_database_type = salt['pillar.get']('postfix:config:default_database_type', 'hash') %}
 
