@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+---
 postfix:
-  manage_master_config: True
+  manage_master_config: true
   master_config:
     # Preferred way of managing services/processes. This allows for finegrained
     # control over each service. See postfix/services.yaml for defaults that can
@@ -10,29 +13,29 @@ postfix:
         maxproc: 10
       # Enable oldstyle TLS wrapped SMTP
       smtps:
-        enable: True
+        enable: true
       # Enable submission service on port 587/tcp with custom options
       submission:
-        enable: True
+        enable: true
         args:
           - "-o smtpd_tls_security_level=encrypt"
           - "-o smtpd_sasl_auth_enable=yes"
           - "-o smtpd_client_restrictions: permit_sasl_authenticated,reject"
       tlsproxy:
-        enable: True
-        chroot: True
+        enable: true
+        chroot: true
       uucp:
-        enable: True
+        enable: true
       # Dovecot delivery via deliver binary. For better performance, investigate
       # using LMTP instead: <https://wiki.dovecot.org/LMTP>
       dovecot:
-        chroot: False
+        chroot: false
         command: pipe
-        enable: True
+        enable: true
         extras: '-d ${recipient}'
         flags: DRhu
         type: unix
-        unpriv: False
+        unpriv: false
         user: vmail:vmail
         argv: /usr/lib/dovecot/deliver
       # Completely customized mail-delivery-agent entry. Will be appended to the
@@ -44,13 +47,13 @@ postfix:
         flags: DRhu
         user: mail
         # Wrap the output in master.cf at 78 chars for better readability
-        wrap: True
+        wrap: true
         # Avoid user and arvg settings to allow define internal processes
         # needed for randomizing relay IP (randmap functionality)
-        no_args: True
+        no_args: true
 
     # Backwards compatible definition of dovecot delivery in master.cf
-    enable_dovecot: False
+    enable_dovecot: false
     # The following are the default values:
     dovecot:
       user: vmail
@@ -59,23 +62,23 @@ postfix:
       argv: "/usr/lib/dovecot/deliver"
 
     # Backwards compatible definition of submission listener in master.cf
-    enable_submission: False
+    enable_submission: false
     # To replace the defaults use this:
     submission:
       smtpd_tls_security_level: encrypt
-      smtpd_sasl_auth_enable: yes
+      smtpd_sasl_auth_enable: 'yes'
       smtpd_client_restrictions: permit_sasl_authenticated,reject
 
-  enable_service: True
-  reload_service: True
+  enable_service: true
+  reload_service: true
 
   postgrey:
-    enabled: True
-    enable_service: True
+    enabled: true
+    enable_service: true
     location: inet:172.16.0.5:6379
 
   policyd-spf:
-    enabled: True
+    enabled: true
     time_limit: 7200s
 
   config:
@@ -86,14 +89,14 @@ postfix:
     readme_directory: 'no'
     myhostname: localhost
     mydestination: localhost, localhost.localdomain
-    relayhost: 
+    relayhost:
     mynetworks: 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
     mailbox_size_limit: 0
     recipient_delimiter: +
     inet_interfaces: all
     inet_protocols: all
 
-    #postsrsd:
+    # postsrsd:
     sender_canonical_maps: tcp:127.0.0.1:10001
     sender_canonical_classes: envelope_sender
     recipient_canonical_maps: tcp:127.0.0.1:10002
@@ -127,8 +130,14 @@ postfix:
     smtpd_sasl_auth_enable: 'yes'
     smtpd_sasl_type: dovecot
     smtpd_sasl_path: /var/run/dovecot/auth-client
-    smtpd_recipient_restrictions: permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
-    smtpd_relay_restrictions: permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
+    smtpd_recipient_restrictions: >-
+      permit_mynetworks,
+      permit_sasl_authenticated,
+      reject_unauth_destination
+    smtpd_relay_restrictions: >-
+      permit_mynetworks,
+      permit_sasl_authenticated,
+      reject_unauth_destination
     smtpd_sasl_security_options: noanonymous
     smtpd_sasl_tls_security_options: $smtpd_sasl_security_options
     smtpd_tls_auth_only: 'yes'
@@ -232,8 +241,8 @@ postfix:
 
     virtual_alias_maps:
       - groupaliasexample:
-        - someuser_1@example.com
-        - someuser_2@example.com
+          - someuser_1@example.com
+          - someuser_2@example.com
       - singlealiasexample: someuser_3@example.com
 
 
@@ -255,4 +264,4 @@ postfix:
       root:
         - me
     virtual_alias_2_maps:
-      - '/(\S+)_(devel|preprod|prod)@sub.example.com$/': '$(1)@$(2).sub.example.com' 
+      - '/(\S+)_(devel|preprod|prod)@sub.example.com$/': '$(1)@$(2).sub.example.com'

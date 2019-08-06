@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+---
 #  Default Postfix master processes as defined by postfix
 #
 # The dictionary is keyed off the service name ("smtp", "smtpd", etc.) except
@@ -9,7 +12,7 @@
 #
 
 defaults:
-# Postfix internal services/processes defaults
+  # Postfix internal services/processes defaults
   smtp:
     chroot: false
     command: smtpd
@@ -218,7 +221,7 @@ defaults:
     maxproc: 1
     type: unix
 
-# Postfix MDA definitions, these are optional and commented out by default
+  # Postfix MDA definitions, these are optional and commented out by default
   maildrop:
     argv: /usr/local/bin/maildrop
     chroot: false
