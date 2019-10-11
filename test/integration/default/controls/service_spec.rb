@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 control 'Postfix service' do
   title 'should be running'
 
