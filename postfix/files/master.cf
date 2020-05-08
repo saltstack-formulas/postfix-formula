@@ -1,7 +1,4 @@
-{%- from "postfix/map.jinja" import postfix with context -%}
 {%- set master_config = salt['pillar.get']('postfix:master_config', {}) -%}
-{% import_yaml "postfix/services.yaml" as postfix_master_services %}
-
 {#-
  # Handle the case that the pillar data does not provide any service
  # configuration but submission parameters are provided in the pillar.
