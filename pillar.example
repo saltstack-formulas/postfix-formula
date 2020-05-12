@@ -156,6 +156,7 @@ postfix:
     smtp_use_tls: 'yes'
     smtp_tls_cert_file: /etc/postfix/ssl/example.com-relay-client-cert.crt
     smtp_tls_key_file: /etc/postfix/ssl/example.com-relay-client-cert.key
+    smtp_tls_policy_maps: hash:/etc/postfix/tls_policy
 
     smtp_sasl_password_maps: hash:/etc/postfix/sasl_passwd
     sender_canonical_maps: hash:/etc/postfix/sender_canonical
@@ -164,6 +165,10 @@ postfix:
 
   transport:
     DOMAIN_NAME: ':[IP_ADDRESS]'
+
+  tls_policy:
+    example.com: encrypt
+    .example.com: encrypt
 
   vmail:
     user: postfix_user
