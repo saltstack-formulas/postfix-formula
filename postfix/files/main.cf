@@ -1,4 +1,3 @@
-{%- from "postfix/map.jinja" import postfix with context -%}
 {%- set config = salt['pillar.get']('postfix:config', {}) -%}
 
 {#- " | list": Python3.6 retuns dict_keys here, which needs to be converted into a list here. -#}

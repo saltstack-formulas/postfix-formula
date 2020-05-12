@@ -21,6 +21,8 @@ include:
     - watch_in:
       - service: postfix
     - template: jinja
+    - context:
+        postfix: {{ postfix|tojson }}
 
 {% if 'vmail' in pillar.get('postfix', '') %}
 {{ postfix.config_path }}/virtual_alias_maps.cf:
@@ -61,6 +63,7 @@ include:
 {% endif %}
 
 {% if salt['pillar.get']('postfix:manage_master_config', True) %}
+{% import_yaml "postfix/services.yaml" as postfix_master_services %}
 {{ postfix.config_path }}/master.cf:
   file.managed:
     - source: salt://postfix/files/master.cf
@@ -72,6 +75,9 @@ include:
     - watch_in:
       - service: postfix
     - template: jinja
+    - context:
+        postfix: {{ postfix|tojson }}
+        postfix_master_services: {{ postfix_master_services|tojson }}
 {% endif %}
 
 {% if 'transport' in pillar.get('postfix', '') %}
