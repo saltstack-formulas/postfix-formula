@@ -33,6 +33,11 @@ postfix:
   enable_service: true
   reload_service: true
 
+  postgrey:
+    enabled: true
+    enable_service: true
+    location: inet:127.0.0.1:10030
+
   config:
     smtpd_banner: $myhostname ESMTP $mail_name
     smtp_tls_CApath: /etc/ssl/certs
