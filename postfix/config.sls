@@ -101,6 +101,27 @@ run-postmap:
       - file: {{ postfix.config_path }}/transport
 {% endif %}
 
+{% if 'tls_policy' in pillar.get('postfix', '') %}
+{{ postfix.config_path }}/tls_policy:
+  file.managed:
+    - source: salt://postfix/files/tls_policy
+    - user: root
+    - group: {{ postfix.root_grp }}
+    - mode: 644
+    - require:
+      - pkg: postfix
+    - watch_in:
+      - service: postfix
+    - template: jinja
+
+run-postmap-tls-policy:
+  cmd.wait:
+    - name: {{ postfix.xbin_prefix }}/sbin/postmap {{ postfix.config_path }}/tls_policy
+    - cwd: /
+    - watch:
+      - file: {{ postfix.config_path }}/tls_policy
+{% endif %}
+
 {%- for domain in salt['pillar.get']('postfix:certificates', {}).keys() %}
 
 postfix_{{ domain }}_ssl_certificate:
