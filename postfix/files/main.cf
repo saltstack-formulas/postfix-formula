@@ -31,6 +31,13 @@
 {{ set_parameter('biff', 'no') }}
 {{ set_parameter('compatibility_level', '2') }}
 
+# must be set
+# See: https://serverfault.com/questions/952776/warning-undefined-parameter-mua-sender-restrictions-when-postconf-n
+{{ set_parameter('smtpd_restriction_classes', 'mua_sender_restrictions, mua_client_restrictions, mua_helo_restrictions') }}
+{{ set_parameter('mua_client_restrictions', 'permit_sasl_authenticated, reject') }}
+{{ set_parameter('mua_sender_restrictions', 'permit_sasl_authenticated, reject') }}
+{{ set_parameter('mua_helo_restrictions', 'permit_mynetworks, reject_non_fqdn_hostname, reject_invalid_hostname, permit') }}
+
 # appending .domain is the MUA's job.
 {{ set_parameter('append_dot_mydomain', 'no') }}
 
