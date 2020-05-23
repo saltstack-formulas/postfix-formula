@@ -2,6 +2,21 @@
 Changelog
 =========
 
+`0.19.0 <https://github.com/saltstack-formulas/postfix-formula/compare/v0.18.2...v0.19.0>`_ (2020-05-23)
+------------------------------------------------------------------------------------------------------------
+
+Continuous Integration
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+* **travis:** add notifications => zulip [skip ci] (\ `c78c421 <https://github.com/saltstack-formulas/postfix-formula/commit/c78c4219846f8c384623da7dd74d4e9a5e419b74>`_\ )
+
+Features
+^^^^^^^^
+
+
+* **maps:** adds tls_policy map for smtp delivery (\ `d87da4a <https://github.com/saltstack-formulas/postfix-formula/commit/d87da4adc49d18674f35e40a948ad88fefaf26f6>`_\ )
+
 `0.18.2 <https://github.com/saltstack-formulas/postfix-formula/compare/v0.18.1...v0.18.2>`_ (2020-05-12)
 ------------------------------------------------------------------------------------------------------------
 
