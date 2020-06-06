@@ -122,6 +122,7 @@ postfix:
 
     local_transport: virtual
     local_recipient_maps: $virtual_mailbox_maps
+    # Use the `mapping` key to define the map
     transport_maps: hash:/etc/postfix/transport
 
     # SMTP server
@@ -162,13 +163,6 @@ postfix:
     sender_canonical_maps: hash:/etc/postfix/sender_canonical
     relay_recipient_maps: hash:/etc/postfix/relay_domains
     virtual_alias_maps: hash:/etc/postfix/virtual
-
-  transport:
-    DOMAIN_NAME: ':[IP_ADDRESS]'
-
-  tls_policy:
-    example.com: encrypt
-    .example.com: encrypt
 
   vmail:
     user: postfix_user
@@ -234,6 +228,13 @@ postfix:
         -----END RSA PRIVATE KEY-----
 
   mapping:
+    transport_maps:
+      - DOMAIN_NAME: ':[IP_ADDRESS]'
+
+    smpt_tls_policy_maps:
+      - example.com: encrypt
+      - .example.com: encrypt
+
     smtp_sasl_password_maps:
       - smtp.example.com: myaccount:somepassword
 
