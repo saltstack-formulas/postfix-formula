@@ -1,5 +1,22 @@
 # Changelog
 
+# [1.0.0](https://github.com/saltstack-formulas/postfix-formula/compare/v0.19.0...v1.0.0) (2020-06-06)
+
+
+### Code Refactoring
+
+* **maps:** move tls_policy and transport to mapping section ([06276fd](https://github.com/saltstack-formulas/postfix-formula/commit/06276fd7431e1675795be95c0c8ebb01772ea740))
+
+
+### Continuous Integration
+
+* **kitchen+travis:** use latest pre-salted images ([b364744](https://github.com/saltstack-formulas/postfix-formula/commit/b364744e40b484397fea5c2c1767f77728649de8))
+
+
+### BREAKING CHANGES
+
+* **maps:** `transport` and `tls_policy` keys in `postfix:config` have been moved to the standard `postfix:mapping`.
+
 # [0.19.0](https://github.com/saltstack-formulas/postfix-formula/compare/v0.18.2...v0.19.0) (2020-05-23)
 
 
