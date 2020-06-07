@@ -1,9 +1,22 @@
 {% from "postfix/map.jinja" import postfix with context %}
 
+{%- if grains.os_family == "Suse" %}
+# The existence of this file prevents the system to
+# overwrite files from salt when installing.
+/var/adm/postfix.configured:
+  file.managed:
+    - contents: ''
+    - mode: '0644'
+    - user: 'root'
+    - group: 'root'
+    - require_in:
+      - pkg: postfix
+{%- endif %}
+
 postfix:
   pkg.installed:
     - name: {{ postfix.package }}
-{%- if grains['os_family']=="FreeBSD" %}
+{%- if grains.os_family == "FreeBSD" %}
     - force: True
     - batch: True
 {%- endif %}
