@@ -2,6 +2,15 @@
 Changelog
 =========
 
+`1.0.1 <https://github.com/saltstack-formulas/postfix-formula/compare/v1.0.0...v1.0.1>`_ (2020-06-07)
+---------------------------------------------------------------------------------------------------------
+
+Bug Fixes
+^^^^^^^^^
+
+
+* **main:** fix postconf warning when reloading/starting (\ `04003c6 <https://github.com/saltstack-formulas/postfix-formula/commit/04003c6ee33d5699cc392f7e74f81d27547b5f6e>`_\ )
+
 `1.0.0 <https://github.com/saltstack-formulas/postfix-formula/compare/v0.19.0...v1.0.0>`_ (2020-06-06)
 ----------------------------------------------------------------------------------------------------------
 
