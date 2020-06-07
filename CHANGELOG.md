@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/saltstack-formulas/postfix-formula/compare/v1.0.1...v1.0.2) (2020-06-07)
+
+
+### Bug Fixes
+
+* **opensuse:** fixes config files generation in opensuse ([067bcf6](https://github.com/saltstack-formulas/postfix-formula/commit/067bcf636face6b3a3cb40418758641354ac2402))
+
 ## [1.0.1](https://github.com/saltstack-formulas/postfix-formula/compare/v1.0.0...v1.0.1) (2020-06-07)
 
 

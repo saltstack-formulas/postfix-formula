@@ -15,7 +15,7 @@ This list is sorted by the number of commits per contributor in *descending* ord
      - Contributions
    * - :raw-html-m2r:`<img class='float-left rounded-1' src='https://avatars2.githubusercontent.com/u/10231489?v=4' width='36' height='36' alt='@myii'>`
      - `@myii <https://github.com/myii>`_
-     - 53
+     - 54
    * - :raw-html-m2r:`<img class='float-left rounded-1' src='https://avatars0.githubusercontent.com/u/745513?v=4' width='36' height='36' alt='@EvaSDK'>`
      - `@EvaSDK <https://github.com/EvaSDK>`_
      - 26
@@ -46,15 +46,15 @@ This list is sorted by the number of commits per contributor in *descending* ord
    * - :raw-html-m2r:`<img class='float-left rounded-1' src='https://avatars0.githubusercontent.com/u/94157?v=4' width='36' height='36' alt='@imran1008'>`
      - `@imran1008 <https://github.com/imran1008>`_
      - 8
+   * - :raw-html-m2r:`<img class='float-left rounded-1' src='https://avatars0.githubusercontent.com/u/3012076?v=4' width='36' height='36' alt='@fzipi'>`
+     - `@fzipi <https://github.com/fzipi>`_
+     - 8
    * - :raw-html-m2r:`<img class='float-left rounded-1' src='https://avatars1.githubusercontent.com/u/528061?v=4' width='36' height='36' alt='@puneetk'>`
      - `@puneetk <https://github.com/puneetk>`_
      - 7
    * - :raw-html-m2r:`<img class='float-left rounded-1' src='https://avatars0.githubusercontent.com/u/1197993?v=4' width='36' height='36' alt='@danoe'>`
      - `@danoe <https://github.com/danoe>`_
      - 6
-   * - :raw-html-m2r:`<img class='float-left rounded-1' src='https://avatars0.githubusercontent.com/u/3012076?v=4' width='36' height='36' alt='@fzipi'>`
-     - `@fzipi <https://github.com/fzipi>`_
-     - 5
    * - :raw-html-m2r:`<img class='float-left rounded-1' src='https://avatars1.githubusercontent.com/u/13131979?v=4' width='36' height='36' alt='@BT-dschleich'>`
      - `@BT-dschleich <https://github.com/BT-dschleich>`_
      - 3
