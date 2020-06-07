@@ -11,16 +11,16 @@ postfix:
       smtp:
         # Limit to no more than 10 smtp processes
         maxproc: 10
-      # Enable oldstyle TLS wrapped SMTP
+      # Disable oldstyle TLS wrapped SMTP
       smtps:
-        enable: true
+        enable: false
       # Enable submission service on port 587/tcp with custom options
       submission:
         enable: true
         args:
           - "-o smtpd_tls_security_level=encrypt"
           - "-o smtpd_sasl_auth_enable=yes"
-          - "-o smtpd_client_restrictions: permit_sasl_authenticated,reject"
+          - "-o smtpd_client_restrictions=permit_sasl_authenticated,reject"
       tlsproxy:
         enable: true
         chroot: true

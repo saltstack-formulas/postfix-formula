@@ -53,7 +53,7 @@ Installs and starts postfix SMTP server
 ``postfix.config``
 ^^^^^^^^^^^^^^^^^^
 
-Manages postfix main.cf and optionally the master.cf configuration file
+Manages postfix main.cf and optionally the master.cf configuration file. Generates mappings.
 
 ``postfix.policyd-spf``
 ^^^^^^^^^^^^^^^^^^^^^^^
