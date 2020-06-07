@@ -50,7 +50,8 @@ postfix:
     mynetworks: 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
     mailbox_size_limit: 0
     recipient_delimiter: +
-    inet_interfaces: all
+    # using all has problems in centos with ipv6
+    inet_interfaces: 127.0.0.1
     inet_protocols: all
 
     # Alias

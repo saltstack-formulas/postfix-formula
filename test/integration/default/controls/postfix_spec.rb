@@ -38,7 +38,7 @@ control 'Postfix config' do
     its('mynetworks') { should cmp '127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128' }
     its('mailbox_size_limit') { should cmp '0' }
     its('recipient_delimiter') { should cmp '+' }
-    its('inet_interfaces') { should cmp 'all' }
+    its('inet_interfaces') { should cmp '127.0.0.1' }
     its('inet_protocols') { should cmp 'all' }
     its('message_size_limit') { should cmp '41943040' }
     its('smtpd_recipient_restrictions') do
