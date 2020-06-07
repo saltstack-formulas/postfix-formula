@@ -39,6 +39,11 @@
 
 {{ set_parameter('readme_directory', 'no') }}
 
+# Apply default setgid_group
+{{ set_parameter('setgid_group', postfix.setgid_group) }}
+# Set daemon directory
+{{ set_parameter('daemon_directory', postfix.daemon_directory) }}
+
 {%- set relay_restrictions = ['permit_mynetworks'] %}
 {%- set recipient_restrictions = ['permit_mynetworks'] %}
 

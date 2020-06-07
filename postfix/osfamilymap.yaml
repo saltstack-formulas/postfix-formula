@@ -3,11 +3,13 @@
 ---
 Arch:
   policyd_spf_pkg: python-postfix-policyd-spf
+  daemon_directory: /usr/lib/postfix/bin
 
 Debian:
   policyd_spf_pkg: postfix-policyd-spf-python
   pcre_pkg: postfix-pcre
   mysql_pkg: postfix-mysql
+  daemon_directory: /usr/lib/postfix/sbin
 
 FreeBSD:
   policyd_spf_pkg: py27-postfix-policyd-spf-python
@@ -15,6 +17,7 @@ FreeBSD:
   xbin_prefix: /usr/local
   config_path: /usr/local/etc/postfix
   root_grp: wheel
+  daemon_directory: /usr/local/libexec/postfix
   dovecot_deliver: /usr/local/libexec/dovecot/deliver
 
 Gentoo:
@@ -27,3 +30,7 @@ Gentoo:
 
 RedHat:
   policyd_spf_pkg: pypolicyd-spf
+
+Suse:
+  setgid_group: maildrop
+  daemon_directory: /usr/lib/postfix/bin

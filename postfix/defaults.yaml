@@ -8,6 +8,8 @@ postfix:
   postsrsd_pkg: postsrsd
   postgrey_pkg: postgrey
   root_grp: root
+  setgid_group: postdrop
+  daemon_directory: /usr/libexec/postfix
   service: postfix
   xbin_prefix: /usr
   dovecot_deliver: /usr/lib/dovecot/deliver
