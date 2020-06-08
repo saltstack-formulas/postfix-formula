@@ -2,6 +2,22 @@
 Changelog
 =========
 
+`1.0.3 <https://github.com/saltstack-formulas/postfix-formula/compare/v1.0.2...v1.0.3>`_ (2020-06-08)
+---------------------------------------------------------------------------------------------------------
+
+Bug Fixes
+^^^^^^^^^
+
+
+* **deps:** fixes ordering where postmap requires sane main.cf (\ `a28bd05 <https://github.com/saltstack-formulas/postfix-formula/commit/a28bd05b852c309e70aa8ff0491c12271ddd4461>`_\ )
+* **test:** use specific ip to workaround centos bug (\ `273caf9 <https://github.com/saltstack-formulas/postfix-formula/commit/273caf9b6f42a4127025f9d2d862806653b661c2>`_\ )
+
+Tests
+^^^^^
+
+
+* **default:** add inspec for base and maps (\ `2a61498 <https://github.com/saltstack-formulas/postfix-formula/commit/2a61498fa440b2eef26849c2b0bc2dadf27b2dee>`_\ )
+
 `1.0.2 <https://github.com/saltstack-formulas/postfix-formula/compare/v1.0.1...v1.0.2>`_ (2020-06-07)
 ---------------------------------------------------------------------------------------------------------
 
