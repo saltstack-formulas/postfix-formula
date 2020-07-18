@@ -60,6 +60,11 @@ postfix:
     local_recipient_maps: $virtual_mailbox_maps
     transport_maps: hash:/etc/postfix/transport
 
+    # Other map types
+    check_client_access_maps: regexp:/etc/postfix/check_client_access
+    check_cidr_maps: cidr:/etc/postfix/check_cidr
+    check_pcre_maps: pcre:/etc/postfix/check_pcre
+
     # SMTP server
     smtpd_tls_session_cache_database: btree:${data_directory}/smtpd_scache
     smtpd_use_tls: 'yes'
@@ -158,3 +163,21 @@ postfix:
           - someuser_1@example.com
           - someuser_2@example.com
       - singlealiasexample: someuser_3@example.com
+
+    check_client_access_maps:
+      - '/[%!@].*[%!@]/':
+        - 550 Sender-specified routing rejected
+
+    check_cidr_maps:
+      - '192.168.1.1':
+        - OK
+      - '192.168.0.0/16':
+        - REJECT
+      - '2001:db8::1':
+        - OK
+      - '2001:db8::/32':
+        - REJECT
+
+    check_pcre_maps:
+      - '/^(?!owner-)(.*)-outgoing@(.*)/':
+        - 550 Use ${1}@${2} instead
