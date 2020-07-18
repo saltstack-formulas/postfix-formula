@@ -1,5 +1,17 @@
 # Changelog
 
+# [1.1.0](https://github.com/saltstack-formulas/postfix-formula/compare/v1.0.3...v1.1.0) (2020-07-18)
+
+
+### Continuous Integration
+
+* **kitchen:** use `saltimages` Docker Hub where available [skip ci] ([2ddd417](https://github.com/saltstack-formulas/postfix-formula/commit/2ddd417039d8cb6f8241036c60ee0e6d534aab00))
+
+
+### Features
+
+* **config:** run postmap also for regexp maps ([7584fce](https://github.com/saltstack-formulas/postfix-formula/commit/7584fce0aff912b3aeaf44e6eed82a4c9c267535))
+
 ## [1.0.3](https://github.com/saltstack-formulas/postfix-formula/compare/v1.0.2...v1.0.3) (2020-06-08)
 
 
