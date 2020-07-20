@@ -117,7 +117,7 @@ postfix_{{ domain }}_ssl_key:
   {%- if not file_path.startswith('/') %}
     {%- set file_path = postfix.config_path ~ '/' ~ file_path %}
   {%- endif %}
-  {%- if file_type in ("btree", "cdb", "dbm", "hash", "sdbm", "regexp") %}
+  {%- if file_type in ("btree", "cdb", "cidr", "dbm", "hash", "pcre", "regexp", "sdbm") %}
     {%- set need_postmap = True %}
   {%- endif %}
 postfix_{{ mapping }}:
