@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.2.0](https://github.com/saltstack-formulas/postfix-formula/compare/v1.1.0...v1.2.0) (2020-07-20)
+
+
+### Features
+
+* **maps:** add more map types and tests ([e3970df](https://github.com/saltstack-formulas/postfix-formula/commit/e3970dfc3eac57b7a4f8911ef48d8652f3a26cd7))
+
 # [1.1.0](https://github.com/saltstack-formulas/postfix-formula/compare/v1.0.3...v1.1.0) (2020-07-18)
 
 
