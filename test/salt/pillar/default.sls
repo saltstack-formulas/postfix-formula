@@ -166,18 +166,18 @@ postfix:
 
     check_client_access_maps:
       - '/[%!@].*[%!@]/':
-        - 550 Sender-specified routing rejected
+          - 550 Sender-specified routing rejected
 
     check_cidr_maps:
       - '192.168.1.1':
-        - OK
+          - OK
       - '192.168.0.0/16':
-        - REJECT
+          - REJECT
       - '2001:db8::1':
-        - OK
+          - OK
       - '2001:db8::/32':
-        - REJECT
+          - REJECT
 
     check_pcre_maps:
       - '/^(?!owner-)(.*)-outgoing@(.*)/':
-        - 550 Use ${1}@${2} instead
+          - 550 Use ${1}@${2} instead
