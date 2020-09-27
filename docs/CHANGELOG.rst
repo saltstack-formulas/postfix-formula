@@ -2,6 +2,15 @@
 Changelog
 =========
 
+`1.2.1 <https://github.com/saltstack-formulas/postfix-formula/compare/v1.2.0...v1.2.1>`_ (2020-09-27)
+---------------------------------------------------------------------------------------------------------
+
+Styles
+^^^^^^
+
+
+* linting for ``yamllint`` (\ `780dc9d <https://github.com/saltstack-formulas/postfix-formula/commit/780dc9d372328f0b7ae08425abf1e1f32ed4b49e>`_\ )
+
 `1.2.0 <https://github.com/saltstack-formulas/postfix-formula/compare/v1.1.0...v1.2.0>`_ (2020-07-20)
 ---------------------------------------------------------------------------------------------------------
 
