@@ -66,7 +66,7 @@ postfix_alias_database:
   {% endif %}
     - user: root
     - group: {{ postfix.root_grp }}
-    - mode: 644
+    - mode: '0644'
     - template: jinja
     - context:
         data: {{ salt['pillar.get']('postfix:aliases:present') }}
