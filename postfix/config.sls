@@ -6,8 +6,8 @@ include:
   file.directory:
     - user: root
     - group: {{ postfix.root_grp }}
-    - dir_mode: 755
-    - file_mode: 644
+    - dir_mode: '755'
+    - file_mode: '644'
     - makedirs: True
 
 {{ postfix.config_path }}/main.cf:
@@ -15,7 +15,7 @@ include:
     - source: salt://postfix/files/main.cf
     - user: root
     - group: {{ postfix.root_grp }}
-    - mode: 644
+    - mode: '644'
     - require:
       - pkg: postfix
     - watch_in:
@@ -30,7 +30,7 @@ include:
     - source: salt://postfix/files/virtual_alias_maps.cf
     - user: root
     - group: postfix
-    - mode: 640
+    - mode: '640'
     - require:
       - pkg: postfix
     - watch_in:
@@ -42,7 +42,7 @@ include:
     - source: salt://postfix/files/virtual_mailbox_domains.cf
     - user: root
     - group: postfix
-    - mode: 640
+    - mode: '640'
     - require:
       - pkg: postfix
     - watch_in:
@@ -54,7 +54,7 @@ include:
     - source: salt://postfix/files/virtual_mailbox_maps.cf
     - user: root
     - group: postfix
-    - mode: 640
+    - mode: '640'
     - require:
       - pkg: postfix
     - watch_in:
@@ -69,7 +69,7 @@ include:
     - source: salt://postfix/files/master.cf
     - user: root
     - group: {{ postfix.root_grp }}
-    - mode: 644
+    - mode: '644'
     - require:
       - pkg: postfix
     - watch_in:
@@ -94,7 +94,7 @@ postfix_{{ domain }}_ssl_certificate:
 postfix_{{ domain }}_ssl_key:
   file.managed:
     - name: {{ postfix.config_path }}/ssl/{{ domain }}.key
-    - mode: 600
+    - mode: '600'
     - makedirs: True
     - contents_pillar: postfix:certificates:{{ domain }}:private_key
     - watch_in:
@@ -127,9 +127,9 @@ postfix_{{ mapping }}:
     - user: root
     - group: {{ postfix.root_grp }}
     {%- if mapping.endswith('_sasl_password_maps') %}
-    - mode: 600
+    - mode: '600'
     {%- else %}
-    - mode: 644
+    - mode: '644'
     {%- endif %}
     - template: jinja
     - context:
