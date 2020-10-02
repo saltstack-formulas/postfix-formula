@@ -2,6 +2,16 @@
 Changelog
 =========
 
+`1.2.2 <https://github.com/saltstack-formulas/postfix-formula/compare/v1.2.1...v1.2.2>`_ (2020-10-02)
+---------------------------------------------------------------------------------------------------------
+
+Styles
+^^^^^^
+
+
+* prepend modes with 0 (\ `fdc127c <https://github.com/saltstack-formulas/postfix-formula/commit/fdc127c8db7b19fac9be907ca511b17d5f5c4be0>`_\ )
+* quote modes/numbers (\ `b9c4fba <https://github.com/saltstack-formulas/postfix-formula/commit/b9c4fbadaf164c1589a27af45fbde7092e6a1d8a>`_\ )
+
 `1.2.1 <https://github.com/saltstack-formulas/postfix-formula/compare/v1.2.0...v1.2.1>`_ (2020-09-27)
 ---------------------------------------------------------------------------------------------------------
 
