@@ -1,7 +1,7 @@
 {% from "postfix/map.jinja" import postfix with context %}
 
-pcre:
+postfix-pcre-pkg-installed-pcre:
   pkg.installed:
     - name: {{ postfix.pcre_pkg }}
     - watch_in:
-      - service: postfix
+      - service: postfix-init-service-running-postfix

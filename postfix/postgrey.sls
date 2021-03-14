@@ -1,15 +1,15 @@
 {% from "postfix/map.jinja" import postfix with context %}
 
-postgrey:
+postfix-postgrey-pkg-installed-postgrey:
   pkg.installed:
     - name: {{ postfix.postgrey_pkg }}
-    - watch_in:
-      - service: postgrey
 
+postfix-postgrey-service-running-postgrey:
   service.running:
+    - name: postgrey
     - enable: {{ salt['pillar.get']('postfix:postgrey:enable_service', True) }}
     - require:
-      - pkg: postgrey
+      - pkg: postfix-postgrey-pkg-installed-postgrey
     - watch:
-      - pkg: postgrey
+      - pkg: postfix-postgrey-pkg-installed-postgrey
 

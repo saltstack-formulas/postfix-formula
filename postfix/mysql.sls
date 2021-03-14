@@ -1,7 +1,7 @@
 {% from "postfix/map.jinja" import postfix with context %}
 
-mysql:
+postfix-mysql-pkg-installed-mysql:
   pkg.installed:
     - name: {{ postfix.mysql_pkg }}
     - watch_in:
-      - service: postfix
+      - service: postfix-init-service-running-postfix
