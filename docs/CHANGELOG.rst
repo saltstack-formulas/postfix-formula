@@ -2,6 +2,38 @@
 Changelog
 =========
 
+`2.0.0 <https://github.com/saltstack-formulas/postfix-formula/compare/v1.2.2...v2.0.0>`_ (2021-03-15)
+---------------------------------------------------------------------------------------------------------
+
+Bug Fixes
+^^^^^^^^^
+
+
+* **resources:** make resources' IDs unique (\ `03ad48b <https://github.com/saltstack-formulas/postfix-formula/commit/03ad48b8a4b0b05144d449c9caee998ad6d0628f>`_\ )
+
+Continuous Integration
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+* **commitlint:** ensure ``upstream/master`` uses main repo URL [skip ci] (\ `381b150 <https://github.com/saltstack-formulas/postfix-formula/commit/381b150b0f1d0ab41e60f0ac95a7a6163633d701>`_\ )
+* **gemfile+lock:** use ``ssf`` customised ``kitchen-docker`` repo [skip ci] (\ `c5851e6 <https://github.com/saltstack-formulas/postfix-formula/commit/c5851e67a2125c5367b3ab97b46c6407aa66eaf1>`_\ )
+* **gitlab-ci:** add ``rubocop`` linter (with ``allow_failure``\ ) [skip ci] (\ `22fa184 <https://github.com/saltstack-formulas/postfix-formula/commit/22fa184b14e88a05d4c4284c459a7d887501e404>`_\ )
+* **gitlab-ci:** use GitLab CI as Travis CI replacement (\ `890f3ae <https://github.com/saltstack-formulas/postfix-formula/commit/890f3aebc63484d07f887c870f2825797ba504e9>`_\ )
+* **kitchen+ci:** use latest pre-salted images (after CVE) [skip ci] (\ `19617a0 <https://github.com/saltstack-formulas/postfix-formula/commit/19617a0ad710914c8f4439044d7bf993e1effcc8>`_\ )
+* **kitchen+gitlab-ci:** use latest pre-salted images [skip ci] (\ `d65a7a3 <https://github.com/saltstack-formulas/postfix-formula/commit/d65a7a36c28e3881b058e9c5b898a0f39c5e1ca7>`_\ )
+* **pre-commit:** add to formula [skip ci] (\ `f41392d <https://github.com/saltstack-formulas/postfix-formula/commit/f41392d4504cb60b2fcf2c818cfe97f5487e2844>`_\ )
+* **pre-commit:** enable/disable ``rstcheck`` as relevant [skip ci] (\ `fb5be95 <https://github.com/saltstack-formulas/postfix-formula/commit/fb5be9504ec18c86bab4f387bf62ba816b3ffa64>`_\ )
+* **pre-commit:** finalise ``rstcheck`` configuration [skip ci] (\ `75941ed <https://github.com/saltstack-formulas/postfix-formula/commit/75941ed61443c84c27fea864d0529461564d8969>`_\ )
+* **pre-commit:** update hook for ``rubocop`` [skip ci] (\ `c60d58e <https://github.com/saltstack-formulas/postfix-formula/commit/c60d58eb1168c031c12d656c9605f83afebc9fa1>`_\ )
+
+BREAKING CHANGES
+^^^^^^^^^^^^^^^^
+
+
+* **resources:** as all resources' IDs changed, other formulas
+  depending on this formula's resources will need to be modified
+  accordingly.
+
 `1.2.2 <https://github.com/saltstack-formulas/postfix-formula/compare/v1.2.1...v1.2.2>`_ (2020-10-02)
 ---------------------------------------------------------------------------------------------------------
 
