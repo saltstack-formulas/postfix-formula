@@ -3,17 +3,18 @@
 {%- if grains.os_family == "Suse" %}
 # The existence of this file prevents the system to
 # overwrite files from salt when installing.
-/var/adm/postfix.configured:
+postfix-init-file-managed-postfix.configured:
   file.managed:
+    - name: /var/adm/postfix.configured
     - contents: ''
     - mode: '0644'
     - user: 'root'
     - group: 'root'
     - require_in:
-      - pkg: postfix
+      - pkg: postfix-init-pkg-installed-postfix
 {%- endif %}
 
-postfix:
+postfix-init-pkg-installed-postfix:
   pkg.installed:
     - name: {{ postfix.package }}
 {%- if grains.os_family == "FreeBSD" %}
@@ -21,23 +22,26 @@ postfix:
     - batch: True
 {%- endif %}
     - watch_in:
-      - service: postfix
+      - service: postfix-init-service-running-postfix
+
+postfix-init-service-running-postfix:
   service.running:
+    - name: postfix
     - enable: {{ salt['pillar.get']('postfix:enable_service', True) }}
     - reload: {{ salt['pillar.get']('postfix:reload_service', True) }}
     - require:
-      - pkg: postfix
+      - pkg: postfix-init-pkg-installed-postfix
     - watch:
-      - pkg: postfix
+      - pkg: postfix-init-pkg-installed-postfix
 
 {%- if salt['pillar.get']('postfix:reload_service', True) %}
 # Restart postfix if the package was changed.
 # This also provides an ID to be used in a watch_in statement.
-postfix_service_restart:
+postfix-init-service-running-postfix-restart:
   service.running:
     - name: postfix
     - watch:
-      - pkg: postfix
+      - pkg: postfix-init-pkg-installed-postfix
 {%- endif %}
 
 {# Used for newaliases, postalias and postconf #}
@@ -56,7 +60,7 @@ postfix_service_restart:
   {%- if file_type in ("btree", "cdb", "dbm", "hash", "sdbm") %}
     {%- set need_newaliases = True %}
   {%- endif %}
-postfix_alias_database:
+postfix-init-file-managed-alias-database:
   file.managed:
     - name: {{ file_path }}
   {% if salt['pillar.get']('postfix:aliases:content', None) is string %}
@@ -72,8 +76,10 @@ postfix_alias_database:
         data: {{ salt['pillar.get']('postfix:aliases:present') }}
         colon: True
     - require:
-      - pkg: postfix
+      - pkg: postfix-init-pkg-installed-postfix
+
   {%- if need_newaliases %}
+postfix-init-cmd-wait-new-aliases:
   cmd.wait:
     - name: newaliases
     - cwd: /
@@ -82,13 +88,13 @@ postfix_alias_database:
   {%- endif %}
 {% else %}
   {%- for user, target in salt['pillar.get']('postfix:aliases:present', {}).items() %}
-postfix_alias_present_{{ user }}:
+postfix-init-alias-present-{{ user }}:
   alias.present:
     - name: {{ user }}
     - target: {{ target }}
   {%- endfor %}
   {%- for user in salt['pillar.get']('postfix:aliases:absent', {}) %}
-postfix_alias_absent_{{ user }}:
+postfix-init-alias-absent-{{ user }}:
   alias.absent:
     - name: {{ user }}
   {%- endfor %}

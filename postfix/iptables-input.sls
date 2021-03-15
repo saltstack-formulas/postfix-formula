@@ -1,9 +1,10 @@
-smtp.input:
+postfix-iptables-iptables-chain-present-smtp-input:
   iptables.chain_present:
-    -
+    - name: smtp.input
 
-smtp.iptables.tcp:
+postfix-iptables-iptables-insert-smtp-iptables-tcp:
   iptables.insert:
+    - name: smtp.iptables.tcp
     - table: filter
     - position: 1
     - chain: smtp.input
@@ -14,11 +15,11 @@ smtp.iptables.tcp:
     - proto: tcp
     - save: True
 
-smtp.iptables.filter:
+postfix-iptables-iptables-insert-smtp-iptables-filter:
   iptables.insert:
+    - name: smtp.iptables.filter
     - table: filter
     - position: 1
     - chain: INPUT
     - jump: smtp.input
     - save: True
-

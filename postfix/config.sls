@@ -2,78 +2,84 @@
 include:
   - postfix
 
-{{ postfix.config_path }}:
+postfix-config-file-directory-config-path:
   file.directory:
+    - name: {{ postfix.config_path }}
     - user: root
     - group: {{ postfix.root_grp }}
     - dir_mode: '0755'
     - file_mode: '0644'
     - makedirs: True
 
-{{ postfix.config_path }}/main.cf:
+postfix-config-file-managed-main.cf:
   file.managed:
+    - name: {{ postfix.config_path }}/main.cf
     - source: salt://postfix/files/main.cf
     - user: root
     - group: {{ postfix.root_grp }}
     - mode: '0644'
     - require:
-      - pkg: postfix
+      - pkg: postfix-init-pkg-installed-postfix
     - watch_in:
-      - service: postfix
+      - service: postfix-init-service-running-postfix
     - template: jinja
     - context:
         postfix: {{ postfix|tojson }}
 
 {% if 'vmail' in pillar.get('postfix', '') %}
-{{ postfix.config_path }}/virtual_alias_maps.cf:
+postfix-config-file-managed-virtual-alias-maps.cf:
   file.managed:
+    - name: {{ postfix.config_path }}/virtual_alias_maps.cf
     - source: salt://postfix/files/virtual_alias_maps.cf
     - user: root
     - group: postfix
     - mode: '0640'
     - require:
-      - pkg: postfix
+      - pkg: postfix-init-pkg-installed-postfix
     - watch_in:
-      - service: postfix
+      - service: postfix-init-service-running-postfix
     - template: jinja
 
-{{ postfix.config_path }}/virtual_mailbox_domains.cf:
+postfix-config-file-managed-virtual-mailbox-domains.cf:
   file.managed:
+    - name: {{ postfix.config_path }}/virtual_mailbox_domains.cf
     - source: salt://postfix/files/virtual_mailbox_domains.cf
     - user: root
     - group: postfix
     - mode: '0640'
     - require:
-      - pkg: postfix
+      - pkg: postfix-init-pkg-installed-postfix
     - watch_in:
-      - service: postfix
+      - service: postfix-init-service-running-postfix
     - template: jinja
 
-{{ postfix.config_path }}/virtual_mailbox_maps.cf:
+postfix-config-file-managed-virtual-mailbox-maps.cf:
   file.managed:
+    - name: {{ postfix.config_path }}/virtual_mailbox_maps.cf
     - source: salt://postfix/files/virtual_mailbox_maps.cf
     - user: root
     - group: postfix
     - mode: '0640'
     - require:
-      - pkg: postfix
+      - pkg: postfix-init-pkg-installed-postfix
     - watch_in:
-      - service: postfix
+      - service: postfix-init-service-running-postfix
     - template: jinja
 {% endif %}
 
 {% if salt['pillar.get']('postfix:manage_master_config', True) %}
 {% import_yaml "postfix/services.yaml" as postfix_master_services %}
-{{ postfix.config_path }}/master.cf:
+postfix-config-file-managed-master.cf:
   file.managed:
+    - name: {{ postfix.config_path }}/master.cf
     - source: salt://postfix/files/master.cf
     - user: root
     - group: {{ postfix.root_grp }}
     - mode: '0644'
     - require:
-      - pkg: postfix
+      - pkg: postfix-init-pkg-installed-postfix
     - watch_in:
-      - service: postfix
+      - service: postfix-init-service-running-postfix
     - template: jinja
     - context:
         postfix: {{ postfix|tojson }}
@@ -82,23 +88,22 @@ include:
 
 {%- for domain in salt['pillar.get']('postfix:certificates', {}).keys() %}
 
-postfix_{{ domain }}_ssl_certificate:
-
+postfix-config-file-managed-{{ domain }}-ssl-certificate:
   file.managed:
     - name: {{ postfix.config_path }}/ssl/{{ domain }}.crt
     - makedirs: True
     - contents_pillar: postfix:certificates:{{ domain }}:public_cert
     - watch_in:
-       - service: postfix
+       - service: postfix-init-service-running-postfix
 
-postfix_{{ domain }}_ssl_key:
+postfix-config-file-managed-{{ domain }}-ssl-key:
   file.managed:
     - name: {{ postfix.config_path }}/ssl/{{ domain }}.key
     - mode: '0600'
     - makedirs: True
     - contents_pillar: postfix:certificates:{{ domain }}:private_key
     - watch_in:
-       - service: postfix
+       - service: postfix-init-service-running-postfix
 
 {% endfor %}
 
@@ -120,7 +125,7 @@ postfix_{{ domain }}_ssl_key:
   {%- if file_type in ("btree", "cdb", "cidr", "dbm", "hash", "pcre", "regexp", "sdbm") %}
     {%- set need_postmap = True %}
   {%- endif %}
-postfix_{{ mapping }}:
+postfix-config-file-managed-{{ mapping }}:
   file.managed:
     - name: {{ file_path }}
     - source: salt://postfix/files/mapping.j2
@@ -135,15 +140,16 @@ postfix_{{ mapping }}:
     - context:
         data: {{ data|json() }}
     - require:
-      - pkg: postfix
-      - file: {{ postfix.config_path }}/main.cf
+      - pkg: postfix-init-pkg-installed-postfix
+      - file: postfix-config-file-managed-main.cf
   {%- if need_postmap %}
+postfix-config-cmd-wait-{{ mapping }}:
   cmd.wait:
     - name: {{ postfix.xbin_prefix }}/sbin/postmap {{ file_path }}
     - cwd: /
     - watch:
-      - file: {{ file_path }}
+      - file: postfix-config-file-managed-{{ mapping }}
     - watch_in:
-      - service: postfix
+      - service: postfix-init-service-running-postfix
   {%- endif %}
 {% endfor %}
