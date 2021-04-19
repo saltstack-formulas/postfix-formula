@@ -1,4 +1,6 @@
 {% from "postfix/map.jinja" import postfix with context %}
+{%- set default_database_type = postfix.get('config', {}).get('default_database_type', 'hash')%}
+
 include:
   - postfix
 
