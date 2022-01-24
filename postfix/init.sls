@@ -44,9 +44,6 @@ postfix-init-service-running-postfix-restart:
       - pkg: postfix-init-pkg-installed-postfix
 {%- endif %}
 
-{# Used for newaliases, postalias and postconf #}
-{%- set default_database_type = salt['pillar.get']('postfix:config:default_database_type', 'hash') %}
-
 # manage /etc/aliases if data found in pillar
 {% if 'aliases' in pillar.get('postfix', '') %}
 {% if salt['pillar.get']('postfix:aliases:use_file', true) == true %}
@@ -55,7 +52,7 @@ postfix-init-service-running-postfix-restart:
   {%- if ':' in file_path %}
     {%- set file_type, file_path = postfix.aliases_file.split(':') %}
   {%- else %}
-    {%- set file_type = default_database_type %}
+    {%- set file_type = postfix.default_database_type %}
   {%- endif %}
   {%- if file_type in ("btree", "cdb", "dbm", "hash", "sdbm") %}
     {%- set need_newaliases = True %}
