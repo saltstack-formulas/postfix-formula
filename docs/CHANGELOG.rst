@@ -2,6 +2,42 @@
 Changelog
 =========
 
+`2.0.1 <https://github.com/saltstack-formulas/postfix-formula/compare/v2.0.0...v2.0.1>`_ (2022-01-25)
+---------------------------------------------------------------------------------------------------------
+
+Bug Fixes
+^^^^^^^^^
+
+
+* **config:** set default_database_type; fixes `#118 <https://github.com/saltstack-formulas/postfix-formula/issues/118>`_ (\ `3bd3d1c <https://github.com/saltstack-formulas/postfix-formula/commit/3bd3d1c74e6dd60a984a3f790b8c50fa46ea2ed6>`_\ )
+
+Code Refactoring
+^^^^^^^^^^^^^^^^
+
+
+* **config:** add ``default_database_type`` as default value (\ `6da70d2 <https://github.com/saltstack-formulas/postfix-formula/commit/6da70d21bbfbf613e6f0149c757c5e628ef227fb>`_\ )
+
+Continuous Integration
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+* **3003.1:** update inc. AlmaLinux, Rocky & ``rst-lint`` [skip ci] (\ `3284d38 <https://github.com/saltstack-formulas/postfix-formula/commit/3284d38a367d94ef57c57e88dd6698c88b0affd2>`_\ )
+* **gemfile+lock:** use ``ssf`` customised ``inspec`` repo [skip ci] (\ `cfed974 <https://github.com/saltstack-formulas/postfix-formula/commit/cfed97400047b109a765d5cee95667f6ca1c1fd2>`_\ )
+* **kitchen:** move ``provisioner`` block & update ``run_command`` [skip ci] (\ `31a3836 <https://github.com/saltstack-formulas/postfix-formula/commit/31a3836cd63f09d81ad88f510b61cb831436759c>`_\ )
+* **kitchen+ci:** update with ``3004`` pre-salted images/boxes [skip ci] (\ `dec042a <https://github.com/saltstack-formulas/postfix-formula/commit/dec042aa43e71785bc49247002a16d82af8c1531>`_\ )
+* **kitchen+ci:** update with latest ``3003.2`` pre-salted images [skip ci] (\ `9688f36 <https://github.com/saltstack-formulas/postfix-formula/commit/9688f36aa146d584546da71fa89e04525c08aa42>`_\ )
+* **kitchen+ci:** update with latest CVE pre-salted images [skip ci] (\ `76134b4 <https://github.com/saltstack-formulas/postfix-formula/commit/76134b47c70d98d00dfe1e6d0f3c9cc0095bda69>`_\ )
+* add ``arch-master`` to matrix and update ``.travis.yml`` [skip ci] (\ `c631eca <https://github.com/saltstack-formulas/postfix-formula/commit/c631eca02e2c1c03e38bcd179c9b443c22ce706d>`_\ )
+* add Debian 11 Bullseye & update ``yamllint`` configuration [skip ci] (\ `c11c07d <https://github.com/saltstack-formulas/postfix-formula/commit/c11c07d6a664da11f11c22ddd416d0501a2cb07e>`_\ )
+* **kitchen+gitlab:** adjust matrix to add ``3003`` [skip ci] (\ `04564a7 <https://github.com/saltstack-formulas/postfix-formula/commit/04564a7ad6c803f70cfa487acd92dd1197563469>`_\ )
+* **kitchen+gitlab:** remove Ubuntu 16.04 & Fedora 32 (EOL) [skip ci] (\ `d56006f <https://github.com/saltstack-formulas/postfix-formula/commit/d56006f8d2dac568c06c4e1e83b076acfe49a80c>`_\ )
+
+Tests
+^^^^^
+
+
+* standardise use of ``share`` suite & ``_mapdata`` state [skip ci] (\ `4c394a7 <https://github.com/saltstack-formulas/postfix-formula/commit/4c394a76faea4301df4708854edd39d37a13935d>`_\ )
+
 `2.0.0 <https://github.com/saltstack-formulas/postfix-formula/compare/v1.2.2...v2.0.0>`_ (2021-03-15)
 ---------------------------------------------------------------------------------------------------------
 

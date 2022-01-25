@@ -1,7 +1,7 @@
 name: postfix
 os: Debian, Ubuntu, Raspbian, RedHat, Fedora, CentOS, Suse, openSUSE
 os_family: Debian, RedHat, Suse
-version: 2.0.0
+version: 2.0.1
 release: 1
 minimum_version: 2016.11
 summary: Postfix formula
