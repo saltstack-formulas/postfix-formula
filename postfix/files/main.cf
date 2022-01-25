@@ -118,8 +118,6 @@ policy-spf_time_limit = {{ policyd_spf.get('time_limit', '3600s') }}
 {{ set_parameter('smtpd_recipient_restrictions', recipient_restrictions) }}
 
 {# From init.sls #}
-{%- set default_database_type = salt['pillar.get']('postfix:config:default_database_type', 'hash') %}
-
 {%- for mapping, data in salt['pillar.get']('postfix:mapping', {}).items() %}
   {%- set file_path = salt['pillar.get']('postfix:config:' ~ mapping) %}
   {%- if file_path.startswith('proxy:') %}
@@ -128,7 +126,7 @@ policy-spf_time_limit = {{ policyd_spf.get('time_limit', '3600s') }}
   {%- elif ':' in file_path %}
     {%- set file_type, file_path = file_path.split(':') %}
   {%- else %}
-    {%- set file_type = default_database_type %}
+    {%- set file_type = postfix.default_database_type %}
   {%- endif %}
   {%- if not file_path.startswith('/') %}
     {%- set file_path = postfix.config_path ~ '/' ~ file_path %}

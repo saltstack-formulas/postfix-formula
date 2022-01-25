@@ -1,4 +1,5 @@
 {% from "postfix/map.jinja" import postfix with context %}
+
 include:
   - postfix
 
@@ -117,7 +118,7 @@ postfix-config-file-managed-{{ domain }}-ssl-key:
   {%- elif ':' in file_path %}
     {%- set file_type, file_path = file_path.split(':') %}
   {%- else %}
-    {%- set file_type = default_database_type %}
+    {%- set file_type = postfix.default_database_type %}
   {%- endif %}
   {%- if not file_path.startswith('/') %}
     {%- set file_path = postfix.config_path ~ '/' ~ file_path %}

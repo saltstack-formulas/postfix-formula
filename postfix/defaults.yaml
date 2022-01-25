@@ -13,3 +13,4 @@ postfix:
   service: postfix
   xbin_prefix: /usr
   dovecot_deliver: /usr/lib/dovecot/deliver
+  default_database_type: hash
