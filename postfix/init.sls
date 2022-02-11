@@ -76,11 +76,11 @@ postfix-init-file-managed-alias-database:
       - pkg: postfix-init-pkg-installed-postfix
 
   {%- if need_newaliases %}
-postfix-init-cmd-wait-new-aliases:
-  cmd.wait:
+postfix-init-cmd-run-new-aliases:
+  cmd.run:
     - name: newaliases
     - cwd: /
-    - watch:
+    - onchanges:
       - file: {{ file_path }}
   {%- endif %}
 {% else %}

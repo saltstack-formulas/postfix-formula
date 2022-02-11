@@ -144,11 +144,11 @@ postfix-config-file-managed-{{ mapping }}:
       - pkg: postfix-init-pkg-installed-postfix
       - file: postfix-config-file-managed-main.cf
   {%- if need_postmap %}
-postfix-config-cmd-wait-{{ mapping }}:
-  cmd.wait:
+postfix-config-cmd-run-{{ mapping }}:
+  cmd.run:
     - name: {{ postfix.xbin_prefix }}/sbin/postmap {{ file_path }}
     - cwd: /
-    - watch:
+    - onchanges:
       - file: postfix-config-file-managed-{{ mapping }}
     - watch_in:
       - service: postfix-init-service-running-postfix
