@@ -2,6 +2,23 @@
 Changelog
 =========
 
+`2.0.2 <https://github.com/saltstack-formulas/postfix-formula/compare/v2.0.1...v2.0.2>`_ (2022-02-13)
+---------------------------------------------------------------------------------------------------------
+
+Code Refactoring
+^^^^^^^^^^^^^^^^
+
+
+* **salt-lint:** fix violations (\ `6a33d98 <https://github.com/saltstack-formulas/postfix-formula/commit/6a33d98d75b7cbce3fa735f9e2c4071da0ce0355>`_\ )
+
+Continuous Integration
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+* update linters to latest versions [skip ci] (\ `62eb687 <https://github.com/saltstack-formulas/postfix-formula/commit/62eb687b052a31bc395f53dd9c8259ff643b449e>`_\ )
+* **gemfile:** allow rubygems proxy to be provided as an env var [skip ci] (\ `5d167a4 <https://github.com/saltstack-formulas/postfix-formula/commit/5d167a403c253e3b9f6c68641e0b871d287d2662>`_\ )
+* **kitchen+gitlab:** update for new pre-salted images [skip ci] (\ `008ac83 <https://github.com/saltstack-formulas/postfix-formula/commit/008ac83c7a95dc1d29ee388f0d634ff3bd9b0320>`_\ )
+
 `2.0.1 <https://github.com/saltstack-formulas/postfix-formula/compare/v2.0.0...v2.0.1>`_ (2022-01-25)
 ---------------------------------------------------------------------------------------------------------
 
