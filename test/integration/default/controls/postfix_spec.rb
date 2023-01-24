@@ -63,6 +63,7 @@ control 'Postfix config' do
     its('smtpd_tls_session_cache_timeout') { should cmp '3600s' }
     its('relay_domains') { should cmp '$mydestination' }
     its('smtp_use_tls') { should cmp 'yes' }
+    its('smtp_tls_wrappermode') { should cmp 'yes' }
     its('smtp_tls_cert_file') do
       should cmp '/etc/postfix/ssl/example.com-relay-client-cert.crt'
     end

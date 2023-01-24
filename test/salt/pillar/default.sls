@@ -98,6 +98,7 @@ postfix:
     smtp_tls_cert_file: /etc/postfix/ssl/example.com-relay-client-cert.crt
     smtp_tls_key_file: /etc/postfix/ssl/example.com-relay-client-cert.key
     smtp_tls_policy_maps: hash:/etc/postfix/tls_policy
+    smtp_tls_wrappermode: 'yes'
 
     smtp_sasl_password_maps: hash:/etc/postfix/sasl_passwd
     sender_canonical_maps: hash:/etc/postfix/sender_canonical
