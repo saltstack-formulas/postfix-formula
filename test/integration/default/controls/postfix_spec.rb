@@ -42,9 +42,9 @@ control 'Postfix config' do
     its('inet_protocols') { should cmp 'all' }
     its('message_size_limit') { should cmp '41943040' }
     its('smtpd_recipient_restrictions') do
-      should cmp 'permit_mynetworks,'\
-                 ' permit_sasl_authenticated,'\
-                 ' reject_unauth_destination'
+      should cmp 'permit_mynetworks, ' \
+                 'permit_sasl_authenticated, ' \
+                 'reject_unauth_destination'
     end
     its('transport_maps') { should cmp 'hash:/etc/postfix/transport' }
     its('smtp_tls_policy_maps') { should cmp 'hash:/etc/postfix/tls_policy' }
@@ -55,8 +55,8 @@ control 'Postfix config' do
     its('local_transport') { should cmp 'virtual' }
     its('local_recipient_maps') { should cmp '$virtual_mailbox_maps' }
     its('smtpd_relay_restrictions') do
-      should cmp 'permit_mynetworks, '\
-                 'permit_sasl_authenticated, '\
+      should cmp 'permit_mynetworks, ' \
+                 'permit_sasl_authenticated, ' \
                  'reject_unauth_destination'
     end
     its('smtpd_sasl_local_domain') { should cmp '$mydomain' }
