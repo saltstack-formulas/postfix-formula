@@ -2,6 +2,24 @@
 Changelog
 =========
 
+`2.0.3 <https://github.com/saltstack-formulas/postfix-formula/compare/v2.0.2...v2.0.3>`_ (2025-04-10)
+---------------------------------------------------------------------------------------------------------
+
+Continuous Integration
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+* update ``pre-commit`` configuration inc. for pre-commit.ci [skip ci] (\ `02e4fb9 <https://github.com/saltstack-formulas/postfix-formula/commit/02e4fb91be51bcb3e05f1580aca2a706f4ad17fb>`_\ )
+* use latest test images (\ `c48cf63 <https://github.com/saltstack-formulas/postfix-formula/commit/c48cf63e5acf2e926dae648b7fb17e55b48a78cd>`_\ )
+* **kitchen+gitlab:** update for new pre-salted images [skip ci] (\ `b4b0893 <https://github.com/saltstack-formulas/postfix-formula/commit/b4b0893b1191714866e4b1bf7ff22f76d90fadc2>`_\ )
+
+Tests
+^^^^^
+
+
+* **system:** add ``build_platform_codename`` [skip ci] (\ `0d68789 <https://github.com/saltstack-formulas/postfix-formula/commit/0d68789640710b01cafff00d60047d161d3cc111>`_\ )
+* **system.rb:** add support for ``mac_os_x`` [skip ci] (\ `842a109 <https://github.com/saltstack-formulas/postfix-formula/commit/842a10935d3fc116ae9cb09b000e208c25f6ceef>`_\ )
+
 `2.0.2 <https://github.com/saltstack-formulas/postfix-formula/compare/v2.0.1...v2.0.2>`_ (2022-02-13)
 ---------------------------------------------------------------------------------------------------------
 
