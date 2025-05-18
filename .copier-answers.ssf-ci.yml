@@ -1,0 +1,4 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v1.1.9
+_src_path: https://github.com/dafyddj/copier-ssf-ci
+formula_name: postfix

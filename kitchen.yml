@@ -17,6 +17,12 @@ provisioner:
   salt_copy_filter:
     - .kitchen
     - .git
+  pillars_from_directories:
+    - test/salt/pillar
+
+transport:
+  # Avoid lengthy waits when a container does not launch correctly
+  max_wait_until_ready: 180
 
 platforms:
   ## SALT `master`
@@ -266,9 +272,7 @@ suites:
         top.sls:
           base:
             '*':
-              - postfix
-      pillars_from_files:
-        postfix.sls: test/salt/pillar/default.sls
+              - default
     verifier:
       inspec_tests:
         - path: test/integration/default
