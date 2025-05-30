@@ -8,4 +8,12 @@ renovate_extend_presets:
 - github>saltstack-formulas/.github:copier
 renovate_ignore_presets: []
 supported_oses:
+- AlmaLinux OS
+- Amazon Linux
+- CentOS
 - Debian
+- Fedora Linux
+- openSUSE
+- Oracle Linux
+- Rocky Linux
+- Ubuntu
