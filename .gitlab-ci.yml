@@ -137,12 +137,14 @@ rubocop:
 # OpenSUSE master branch will fail until zypperpkg module is back in salt core
 # https://github.com/saltstack/great-module-migration/issues/14
 #
+# The alias states were removed in the great module migration, causing the
+# tests to fail with Salt master branch
+# See https://github.com/saltstack-formulas/postfix-formula/issues/134
 almalinux-9-master: {extends: '.test_instance_failure_permitted'}
 almalinux-8-master: {extends: '.test_instance_failure_permitted'}
 amazonlinux-2023-master: {extends: '.test_instance_failure_permitted'}
 amazonlinux-2-master: {extends: '.test_instance_failure_permitted'}
 centos-stream9-master: {extends: '.test_instance_failure_permitted'}
->>>>>>> after updating
 debian-12-master: {extends: '.test_instance_failure_permitted'}
 debian-11-master: {extends: '.test_instance_failure_permitted'}
 fedora-41-master: {extends: '.test_instance_failure_permitted'}

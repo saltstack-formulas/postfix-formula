@@ -1,33 +1,4 @@
 {
-<<<<<<< before updating
-  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
-  enabledManagers: [
-    'copier',
-    'git-submodules',
-  ],
-  extends: [
-    'config:recommended',
-    'github>saltstack-formulas/.github',
-  ],
-  automergeStrategy: 'merge-commit',
-  'git-submodules': {
-    'enabled': true
-  },
-  packageRules: [
-    {
-      matchFileNames: [
-        'template/**'
-      ],
-      semanticCommitType: 'fix',
-    },
-    {
-      automerge: true,
-      matchManagers: [
-        'git-submodules'
-      ],
-    },
-  ],
-=======
 $schema: 'https://docs.renovatebot.com/renovate-schema.json',
 extends: [
   "github>saltstack-formulas/.github",
@@ -37,5 +8,4 @@ extends: [
  * This file is managed as part of a Copier template.     *
  * Please make your own changes below this comment.       *
  *********************************************************/
->>>>>>> after updating
 }
