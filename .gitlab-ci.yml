@@ -14,15 +14,15 @@
   stage_test: &stage_test 'test'
   # `image`
   # yamllint disable rule:line-length
-  image_commitlint: &image_commitlint 'techneg/ci-commitlint:v1.1.87@sha256:7d88b7ea69f3cd917995d0e7ea5ce7aae97383db95003319d0c43a1d68372402'
-  image_dindruby: &image_dindruby 'techneg/ci-docker-python-ruby:v2.2.56@sha256:ff9bbcb82cc2b4ce5c322e45a5afe2a952cf2a418e13aa4b57bf5609f854a0d4'
-  image_dindrubybionic: &image_dindrubybionic 'techneg/ci-docker-python-ruby:v2.2.56@sha256:ff9bbcb82cc2b4ce5c322e45a5afe2a952cf2a418e13aa4b57bf5609f854a0d4'
-  image_precommit: &image_precommit 'techneg/ci-pre-commit:v2.4.21@sha256:620cdfaa9c45b4941090e2b557f5f551fbc1189caf13689e5bbfbd5c76885400'
+  image_commitlint: &image_commitlint 'techneg/ci-commitlint:v1.1.89@sha256:6d51c9542819b94f0596e3568794d17e3dc742949ae438ea56c95091766d39be'
+  image_dindruby: &image_dindruby 'techneg/ci-docker-python-ruby:v2.2.58@sha256:914a6bd7b98efabd844f57d0d2539e8864162a73da581409a3e7fec41e0a4c5f'
+  image_dindrubybionic: &image_dindrubybionic 'techneg/ci-docker-python-ruby:v2.2.58@sha256:914a6bd7b98efabd844f57d0d2539e8864162a73da581409a3e7fec41e0a4c5f'
+  image_precommit: &image_precommit 'techneg/ci-pre-commit:v2.4.23@sha256:53d89d685532acbc29b7be6a56143ec5e11a8a19d5a76969dc4f8c0a35a53425'
   image_rubocop: &image_rubocop 'pipelinecomponents/rubocop:latest@sha256:fe69f9642c7edde46bbd78326d2c42c6e13fc73694efb142e92e206725479328'
   image_semantic-release: &image_semanticrelease 'myii/ssf-semantic-release:15.14@sha256:374f588420087517a3cc0235e11293bffd72d7a59da3d98d5e69f014ff2a7761'
   # `services`
   services_docker_dind: &services_docker_dind
-    - 'docker:dind@sha256:3a861ec98623bd6014610291123751dc19e0c6d474ac3b38767771791ac0eb5e'
+    - 'docker:28.1.1-dind@sha256:eceba5b0fc2fcf83a74c298391c2ed9e1adbdaf04ee173611bd6282ec973e7ba'
   # yamllint enable rule:line-length
   # `variables`
   # https://forum.gitlab.com/t/gitlab-com-ci-caching-rubygems/5627/3
@@ -137,6 +137,7 @@ rubocop:
 # OpenSUSE master branch will fail until zypperpkg module is back in salt core
 # https://github.com/saltstack/great-module-migration/issues/14
 #
+<<<<<<< before updating
 # The alias states were removed in the great module migration, causing the tests to fail with Salt master branch
 # See https://github.com/saltstack-formulas/postfix-formula/issues/134
 debian-12-master-py3: {extends: '.test_instance_failure_permitted'}
@@ -168,6 +169,14 @@ opensuse-leap-156-3006-10-py3: {extends: '.test_instance'}
 opensuse-leap-155-3006-10-py3: {extends: '.test_instance'}
 fedora-41-3006-10-py3: {extends: '.test_instance_failure_permitted'}
 fedora-40-3006-10-py3: {extends: '.test_instance'}
+=======
+debian-12-master: {extends: '.test_instance_failure_permitted'}
+debian-11-master: {extends: '.test_instance_failure_permitted'}
+debian-12-3007-2: {extends: '.test_instance'}
+debian-11-3007-2: {extends: '.test_instance'}
+debian-12-3006-10: {extends: '.test_instance'}
+debian-11-3006-10: {extends: '.test_instance'}
+>>>>>>> after updating
 # yamllint enable rule:line-length
 
 ###############################################################################
