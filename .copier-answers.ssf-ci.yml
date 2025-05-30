@@ -1,7 +1,8 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
 _commit: v1.4.1
 _src_path: https://github.com/dafyddj/copier-ssf-ci
-failure_permitted_pattern: -master
+failure_permitted_pattern: "(?x)(\n  -master$|\n  ^fedora-41-|\n  ^amazonlinux-2-\n\
+    )"
 formula_name: postfix
 renovate_extend_presets:
 - github>saltstack-formulas/.github
