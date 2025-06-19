@@ -1,5 +1,4 @@
 ---
-# yamllint disable rule:comments
 name: Test & release
 
 'on':
@@ -20,15 +19,13 @@ jobs:
       should-run: ${{ steps.action.outputs.should-run }}
     steps:
       - id: action
-        uses:
-          # yamllint disable-line rule:line-length
-          techneg-it/should-workflow-run@dcbb88600d59ec2842778ef1e2d41f680f876329 # v1.0.0
+        # yamllint disable-line rule:line-length
+        uses: techneg-it/should-workflow-run@eff19348eb884f57e05bc6f05ae48ece3af14714 # v1.0.1
   pre-commit:
     name: Lint / `pre-commit`
     needs: should-run
     if: fromJSON(needs.should-run.outputs.should-run)
-    # yamllint disable-line rule:line-length
-    container: techneg/ci-pre-commit:v2.4.25@sha256:ff5192e893c1079fbf70e3ce6bfc3773815041786a75659793158be930ba7803
+    container: techneg/ci-pre-commit:v2.4.26@sha256:60f5e15b35fd93a16bff63a6af078f2e61ca06baf1db18a7b30ebaf121f309ba
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -59,7 +56,8 @@ jobs:
       # yamllint disable-line rule:line-length
       - uses: poseidon/wait-for-status-checks@899c768d191b56eef585c18f8558da19e1f3e707 # v0.6.0
         with:
-          ignore: Release / Collect results
+          ignore: >
+            Release / Collect results
           ignore_pattern: ^GitLab CI
           token: ${{ secrets.GITHUB_TOKEN }}
       - run: echo "::notice ::Workflow success!"
