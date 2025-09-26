@@ -45,8 +45,7 @@ postfix-init-service-running-postfix-restart:
 {%- endif %}
 
 # manage /etc/aliases if data found in pillar
-{% if 'aliases' in pillar.get('postfix', '') %}
-{% if salt['pillar.get']('postfix:aliases:use_file', true) == true %}
+{%- if 'aliases' in pillar.get('postfix', '') %}
   {%- set need_newaliases = False %}
   {%- set file_path = postfix.aliases_file %}
   {%- if ':' in file_path %}
@@ -54,6 +53,7 @@ postfix-init-service-running-postfix-restart:
   {%- else %}
     {%- set file_type = postfix.default_database_type %}
   {%- endif %}
+{% if salt['pillar.get']('postfix:aliases:use_file', true) == true %}
   {%- if file_type in ("btree", "cdb", "dbm", "hash", "sdbm") %}
     {%- set need_newaliases = True %}
   {%- endif %}
@@ -74,7 +74,22 @@ postfix-init-file-managed-alias-database:
         colon: True
     - require:
       - pkg: postfix-init-pkg-installed-postfix
-
+{% else %}
+  {%- if salt['pillar.get']('postfix:aliases:present', False) or salt['pillar.get']('postfix:aliases:absent', False)%}
+    {%- set need_newaliases = True %}
+  {%- endif %}
+  {%- for user, target in salt['pillar.get']('postfix:aliases:present', {}).items() %}
+postfix-init-alias-present-{{ user }}:
+  alias.present:
+    - name: {{ user }}
+    - target: {{ target }}
+  {% endfor %}
+  {%- for user in salt['pillar.get']('postfix:aliases:absent', {}) %}
+postfix-init-alias-absent-{{ user }}:
+  alias.absent:
+    - name: {{ user }}
+  {% endfor %}
+{%- endif %}
   {%- if need_newaliases %}
 postfix-init-cmd-run-new-aliases:
   cmd.run:
@@ -83,17 +98,4 @@ postfix-init-cmd-run-new-aliases:
     - onchanges:
       - file: {{ file_path }}
   {%- endif %}
-{% else %}
-  {%- for user, target in salt['pillar.get']('postfix:aliases:present', {}).items() %}
-postfix-init-alias-present-{{ user }}:
-  alias.present:
-    - name: {{ user }}
-    - target: {{ target }}
-  {%- endfor %}
-  {%- for user in salt['pillar.get']('postfix:aliases:absent', {}) %}
-postfix-init-alias-absent-{{ user }}:
-  alias.absent:
-    - name: {{ user }}
-  {%- endfor %}
-{% endif %}
-{% endif %}
+{%- endif %}
