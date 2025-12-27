@@ -84,16 +84,32 @@ postfix-init-cmd-run-new-aliases:
       - file: {{ file_path }}
   {%- endif %}
 {% else %}
-  {%- for user, target in salt['pillar.get']('postfix:aliases:present', {}).items() %}
+  {%- set present_aliases = salt['pillar.get']('postfix:aliases:present', {}) %}
+  {%- for user, target in present_aliases.items() %}
 postfix-init-alias-present-{{ user }}:
   alias.present:
     - name: {{ user }}
     - target: {{ target }}
   {%- endfor %}
-  {%- for user in salt['pillar.get']('postfix:aliases:absent', {}) %}
+  {%- set absent_aliases = salt['pillar.get']('postfix:aliases:absent', {}) %}
+  {%- for user in absent_aliases %}
 postfix-init-alias-absent-{{ user }}:
   alias.absent:
     - name: {{ user }}
   {%- endfor %}
+
+  {% if present_aliases|length > 0 or absent_aliases|length > 0 %}
+postfix-init-cmd-run-new-aliases:
+  cmd.run:
+    - name: newaliases
+    - cwd: /
+    - onchanges:
+      {%- for user in present_aliases %}
+      - alias: postfix-init-alias-present-{{ user}}
+      {%- endfor %}
+      {%- for user in absent_aliases %}
+      - alias: postfix-init-alias-absent-{{ user}}
+      {%- endfor %}
+  {%- endif %}
 {% endif %}
 {% endif %}
